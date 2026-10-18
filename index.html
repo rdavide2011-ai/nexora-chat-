@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#075e54">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Nexora Chat">
-  <title>Nexora Chat — Notifiche</title>
+  <title>Nexora Chat</title>
 
   <style>
     * { box-sizing: border-box; }
@@ -16,9 +16,9 @@
       margin: 0;
       min-height: 100vh;
       min-height: 100dvh;
+      padding: 20px;
       display: grid;
       place-items: center;
-      padding: 20px;
       background: #101b20;
       color: #f5f7f8;
       font-family: Arial, sans-serif;
@@ -26,19 +26,18 @@
 
     main {
       width: 100%;
-      max-width: 420px;
-      padding: 28px 24px;
+      max-width: 430px;
+      padding: 26px 22px;
       border: 1px solid #34474d;
       border-radius: 24px;
       background: #202e34;
-      text-align: center;
       box-shadow: 0 20px 60px #0004;
     }
 
     .logo {
-      width: 60px;
-      height: 60px;
-      margin: auto;
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 16px;
       display: grid;
       place-items: center;
       border-radius: 18px;
@@ -47,219 +46,496 @@
       font-weight: bold;
     }
 
-    h1 { font-size: 24px; }
+    h1, .subtitle { text-align: center; }
+    h1 { margin-bottom: 8px; font-size: 25px; }
 
-    p {
+    .subtitle {
+      margin-bottom: 24px;
       color: #c9dce2;
       line-height: 1.5;
     }
 
-    button {
-      width: 100%;
-      padding: 15px;
-      margin-top: 12px;
-      border: 0;
-      border-radius: 12px;
-      background: #078577;
-      color: white;
-      font-weight: bold;
-      font-size: 15px;
-      cursor: pointer;
-      transition: opacity .2s, transform .2s;
+    label {
+      display: block;
+      margin: 13px 0 6px;
+      color: #dce8eb;
+      font-size: 13px;
     }
 
-    button:active { transform: scale(.98); }
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #43585f;
+      border-radius: 11px;
+      outline: none;
+      background: #142127;
+      color: white;
+      font-size: 16px;
+    }
+
+    input:focus { border-color: #078577; }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      border: 0;
+      border-radius: 11px;
+      background: #078577;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
     button.secondary { background: #344c48; }
+    button.danger { background: #713d42; }
 
     button:disabled {
-      opacity: .45;
+      opacity: .5;
       cursor: not-allowed;
     }
 
-    #status {
-      overflow-wrap: anywhere;
-      font-size: 13px;
-      margin-top: 18px;
+    .separator {
+      height: 1px;
+      margin: 22px 0;
+      background: #394a50;
     }
 
-    .note {
-      font-size: 12px;
+    .hidden { display: none !important; }
+
+    #status {
+      margin-top: 18px;
+      color: #b9d7d9;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+      text-align: center;
+    }
+
+    .account {
+      padding: 14px;
+      border-radius: 12px;
+      background: #142127;
+      overflow-wrap: anywhere;
+    }
+
+    .account strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .small {
       color: #9db1b8;
+      font-size: 12px;
+      line-height: 1.5;
     }
   </style>
 </head>
 
 <body>
-  <main>
-    <div class="logo">N</div>
-    <h1>Nexora Chat</h1>
-    <p>Attiva le notifiche per ricevere gli avvisi anche quando non hai l'app aperta.</p>
+<main>
+  <div class="logo">N</div>
+  <h1>Nexora Chat</h1>
+  <p class="subtitle">Accedi o crea il tuo account.</p>
 
-    <button id="enable">Attiva notifiche</button>
-    <button id="test" class="secondary" disabled>
+  <section id="authSection">
+    <label for="username">Username</label>
+    <input id="username" type="text" autocomplete="username"
+      maxlength="24" placeholder="Il tuo username">
+
+    <label for="email">Email</label>
+    <input id="email" type="email" autocomplete="email"
+      placeholder="nome@esempio.it">
+
+    <label for="password">Password</label>
+    <input id="password" type="password"
+      autocomplete="current-password" minlength="8"
+      placeholder="Almeno 8 caratteri">
+
+    <button id="registerButton">Crea account</button>
+    <button id="loginButton" class="secondary">Accedi</button>
+
+    <p class="small">
+      La registrazione usa Supabase Auth. La verifica tramite codice email
+      non è ancora configurata.
+    </p>
+  </section>
+
+  <section id="appSection" class="hidden">
+    <div class="account">
+      <strong id="welcome">Account</strong>
+      <span id="accountEmail"></span>
+    </div>
+
+    <div class="separator"></div>
+
+    <h2>Notifiche</h2>
+    <p class="small">
+      Attiva le notifiche su questo dispositivo per ricevere gli avvisi push.
+    </p>
+
+    <button id="enableNotifications">Attiva notifiche</button>
+    <button id="testNotification" class="secondary" disabled>
       Ricevi notifica di test
     </button>
 
-    <p id="status" role="status" aria-live="polite">
-      Attiva le notifiche per iniziare.
-    </p>
+    <button id="logoutButton" class="danger">Esci dall'account</button>
+  </section>
 
-    <p class="note">
-      Il test invia una notifica dopo 5 secondi.
-    </p>
-  </main>
+  <p id="status" role="status" aria-live="polite">Caricamento...</p>
+</main>
 
-  <script>
-    "use strict";
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    const VAPID_PUBLIC_KEY =
-      "BEerw_zOGMn7TBC13Ike0xTlXx09tCoLdeE8omauraJ362wgWvy3rhH_GQ6qJ6a1wO9sbqvV3X0W0OF_Hp8d8Uw";
+<script>
+"use strict";
 
-    const FUNCTION_URL =
-      "https://dycbbhqzpgnnyilzwuwa.supabase.co/functions/v1/schedule-test-notification";
+// Configurazione Supabase
+const SUPABASE_URL = "https://dycbbhqzpgnnyilzwuwa.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_zYdD5LSAKMFRNk-Yas3Hxg_oogRDb3a";
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_zYdD5LSAKMFRNk-Yas3Hxg_oogRDb3a";
+// Configurazione notifiche push
+const VAPID_PUBLIC_KEY =
+  "BEerw_zOGMn7TBC13Ike0xTlXx09tCoLdeE8omauraJ362wgWvy3rhH_GQ6qJ6a1wO9sbqvV3X0W0OF_Hp8d8Uw";
 
-    const enableButton = document.getElementById("enable");
-    const testButton = document.getElementById("test");
-    const statusElement = document.getElementById("status");
+const FUNCTION_URL =
+  "https://dycbbhqzpgnnyilzwuwa.supabase.co/functions/v1/schedule-test-notification";
 
-    function setStatus(message) {
-      statusElement.textContent = message;
+const { createClient } = supabase;
+
+const client = createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  }
+);
+
+const $ = id => document.getElementById(id);
+
+const authSection = $("authSection");
+const appSection = $("appSection");
+const statusElement = $("status");
+const registerButton = $("registerButton");
+const loginButton = $("loginButton");
+const logoutButton = $("logoutButton");
+const enableButton = $("enableNotifications");
+const testButton = $("testNotification");
+
+let currentUser = null;
+
+function setStatus(message) {
+  statusElement.textContent = message;
+}
+
+function setBusy(busy) {
+  registerButton.disabled = busy;
+  loginButton.disabled = busy;
+}
+
+function urlBase64ToUint8Array(value) {
+  const padding = "=".repeat((4 - value.length % 4) % 4);
+  const base64 = (value + padding)
+    .replace(/-/g, "+")
+    .replace(/_/g, "/");
+
+  const raw = atob(base64);
+  return Uint8Array.from(raw, character => character.charCodeAt(0));
+}
+
+function showAuth() {
+  currentUser = null;
+  authSection.classList.remove("hidden");
+  appSection.classList.add("hidden");
+  testButton.disabled = true;
+}
+
+function showApp(user) {
+  currentUser = user;
+  authSection.classList.add("hidden");
+  appSection.classList.remove("hidden");
+
+  const username = user.user_metadata?.username;
+
+  $("welcome").textContent = username
+    ? "Ciao, " + username
+    : "Account Nexora";
+
+  $("accountEmail").textContent = user.email || "";
+  setStatus("Accesso effettuato.");
+  checkExistingSubscription();
+}
+
+async function checkExistingSubscription() {
+  try {
+    if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+      return;
     }
 
-    function urlBase64ToUint8Array(value) {
-      const padding = "=".repeat((4 - value.length % 4) % 4);
-      const base64 = (value + padding)
-        .replace(/-/g, "+")
-        .replace(/_/g, "/");
+    const registration = await navigator.serviceWorker.register(
+      "/service-worker.js"
+    );
 
-      const raw = atob(base64);
+    const readyRegistration = await navigator.serviceWorker.ready;
+    const subscription =
+      await readyRegistration.pushManager.getSubscription();
 
-      return Uint8Array.from(raw, character =>
-        character.charCodeAt(0)
+    testButton.disabled = !subscription ||
+      Notification.permission !== "granted";
+  } catch {
+    testButton.disabled = true;
+  }
+}
+
+async function registerAccount() {
+  const username = $("username").value.trim();
+  const email = $("email").value.trim();
+  const password = $("password").value;
+
+  if (username.length < 3) {
+    setStatus("Lo username deve contenere almeno 3 caratteri.");
+    return;
+  }
+
+  if (!email || !email.includes("@")) {
+    setStatus("Inserisci un indirizzo email valido.");
+    return;
+  }
+
+  if (password.length < 8) {
+    setStatus("La password deve contenere almeno 8 caratteri.");
+    return;
+  }
+
+  setBusy(true);
+  setStatus("Creazione dell'account...");
+
+  try {
+    const { data, error } = await client.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { username }
+      }
+    });
+
+    if (error) throw error;
+
+    if (data.session && data.user) {
+      showApp(data.user);
+      setStatus("Account creato e accesso effettuato.");
+    } else {
+      setStatus(
+        "Account creato, ma Supabase non ha avviato una sessione. " +
+        "Controlla la configurazione di conferma email e riprova ad accedere."
+      );
+    }
+  } catch (error) {
+    setStatus("Registrazione non riuscita: " + error.message);
+  } finally {
+    setBusy(false);
+  }
+}
+
+async function loginAccount() {
+  const email = $("email").value.trim();
+  const password = $("password").value;
+
+  if (!email || !password) {
+    setStatus("Inserisci email e password.");
+    return;
+  }
+
+  setBusy(true);
+  setStatus("Accesso in corso...");
+
+  try {
+    const { data, error } = await client.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) throw error;
+
+    showApp(data.user);
+  } catch (error) {
+    setStatus("Accesso non riuscito: " + error.message);
+  } finally {
+    setBusy(false);
+  }
+}
+
+async function logoutAccount() {
+  logoutButton.disabled = true;
+  setStatus("Uscita dall'account...");
+
+  try {
+    const { error } = await client.auth.signOut();
+    if (error) throw error;
+
+    showAuth();
+    setStatus("Sei uscito dall'account.");
+  } catch (error) {
+    setStatus("Errore durante l'uscita: " + error.message);
+  } finally {
+    logoutButton.disabled = false;
+  }
+}
+
+async function getRegistration() {
+  if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+    throw new Error("Questo browser non supporta le notifiche push.");
+  }
+
+  if (!window.isSecureContext) {
+    throw new Error("Apri Nexora Chat tramite HTTPS.");
+  }
+
+  await navigator.serviceWorker.register("/service-worker.js");
+  return await navigator.serviceWorker.ready;
+}
+
+async function enableNotifications() {
+  enableButton.disabled = true;
+  testButton.disabled = true;
+
+  try {
+    if (!currentUser) throw new Error("Accedi prima al tuo account.");
+
+    if (!("Notification" in window)) {
+      throw new Error("Notifiche non supportate.");
+    }
+
+    if (Notification.permission === "denied") {
+      throw new Error(
+        "Notifiche bloccate nelle impostazioni del dispositivo."
       );
     }
 
-    async function getRegistration() {
-      if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-        throw new Error("Questo browser non supporta le notifiche push.");
-      }
+    const permission = await Notification.requestPermission();
 
-      if (!window.isSecureContext) {
-        throw new Error("Apri Nexora Chat tramite HTTPS.");
-      }
-
-      await navigator.serviceWorker.register("/service-worker.js");
-
-      return await navigator.serviceWorker.ready;
+    if (permission !== "granted") {
+      throw new Error("Permesso notifiche non concesso.");
     }
 
-    async function enableNotifications() {
-      enableButton.disabled = true;
-      testButton.disabled = true;
+    const registration = await getRegistration();
+    let subscription =
+      await registration.pushManager.getSubscription();
 
-      try {
-        if (!("Notification" in window)) {
-          throw new Error("Le notifiche non sono supportate.");
-        }
+    if (subscription) {
+      const oldKey = subscription.options.applicationServerKey;
+      const newKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
 
-        if (Notification.permission === "denied") {
-          throw new Error(
-            "Notifiche bloccate nelle impostazioni del dispositivo."
-          );
-        }
+      const sameKey = oldKey &&
+        oldKey.byteLength === newKey.byteLength &&
+        newKey.every((byte, index) => byte === oldKey[index]);
 
-        const permission = await Notification.requestPermission();
-
-        if (permission !== "granted") {
-          throw new Error("Permesso notifiche non concesso.");
-        }
-
-        const registration = await getRegistration();
-
-        let subscription =
-          await registration.pushManager.getSubscription();
-
-        if (subscription) {
-          const existingKey = subscription.options.applicationServerKey;
-          const expectedKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
-
-          const sameKey = existingKey &&
-            existingKey.byteLength === expectedKey.byteLength &&
-            expectedKey.every((byte, index) => byte === existingKey[index]);
-
-          if (!sameKey) {
-            await subscription.unsubscribe();
-            subscription = null;
-          }
-        }
-
-        if (!subscription) {
-          subscription = await registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
-          });
-        }
-
-        testButton.disabled = false;
-        setStatus("Notifiche attive. Ora puoi ricevere il test.");
-      } catch (error) {
-        setStatus("Errore: " + error.message);
-      } finally {
-        enableButton.disabled = false;
+      if (!sameKey) {
+        await subscription.unsubscribe();
+        subscription = null;
       }
     }
 
-    async function sendTestNotification() {
-      testButton.disabled = true;
-
-      try {
-        setStatus("Richiesta inviata. Attendi la notifica...");
-
-        const registration = await getRegistration();
-        const subscription =
-          await registration.pushManager.getSubscription();
-
-        if (Notification.permission !== "granted" || !subscription) {
-          testButton.disabled = true;
-          throw new Error("Premi prima Attiva notifiche.");
-        }
-
-        const response = await fetch(FUNCTION_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": SUPABASE_PUBLISHABLE_KEY,
-            "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
-          },
-          body: JSON.stringify({
-            subscription: subscription.toJSON()
-          })
-        });
-
-        const result = await response.json().catch(() => ({}));
-
-        if (!response.ok) {
-          throw new Error(
-            "HTTP " + response.status + ": " +
-            (result.error || result.details || "Errore del server")
-          );
-        }
-
-        setStatus(
-          "Test inviato. La notifica dovrebbe arrivare tra circa 5 secondi."
-        );
-      } catch (error) {
-        setStatus("Errore: " + error.message);
-        testButton.disabled = false;
-      }
+    if (!subscription) {
+      subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+      });
     }
 
-    enableButton.addEventListener("click", enableNotifications);
-    testButton.addEventListener("click", sendTestNotification);
-  </script>
+    testButton.disabled = false;
+    setStatus("Notifiche attivate su questo dispositivo.");
+  } catch (error) {
+    setStatus("Errore notifiche: " + error.message);
+  } finally {
+    enableButton.disabled = false;
+  }
+}
+
+async function sendTestNotification() {
+  testButton.disabled = true;
+
+  try {
+    if (!currentUser) throw new Error("Accedi prima al tuo account.");
+
+    const registration = await getRegistration();
+    const subscription =
+      await registration.pushManager.getSubscription();
+
+    if (!subscription || Notification.permission !== "granted") {
+      throw new Error("Premi prima Attiva notifiche.");
+    }
+
+    setStatus("Invio della notifica. Attendi circa 5 secondi...");
+
+    const response = await fetch(FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_PUBLISHABLE_KEY,
+        "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
+      },
+      body: JSON.stringify({
+        subscription: subscription.toJSON()
+      })
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(
+        "HTTP " + response.status + ": " +
+        (result.error || result.details || "Errore del server")
+      );
+    }
+
+    setStatus("Richiesta inviata. Controlla le notifiche del dispositivo.");
+  } catch (error) {
+    setStatus("Errore: " + error.message);
+  } finally {
+    testButton.disabled = false;
+  }
+}
+
+registerButton.addEventListener("click", registerAccount);
+loginButton.addEventListener("click", loginAccount);
+logoutButton.addEventListener("click", logoutAccount);
+enableButton.addEventListener("click", enableNotifications);
+testButton.addEventListener("click", sendTestNotification);
+
+async function initialize() {
+  try {
+    const { data, error } = await client.auth.getSession();
+
+    if (error) throw error;
+
+    if (data.session?.user) {
+      showApp(data.session.user);
+    } else {
+      showAuth();
+      setStatus("Accedi o crea un account.");
+    }
+
+    client.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        showApp(session.user);
+      } else {
+        showAuth();
+      }
+    });
+  } catch (error) {
+    showAuth();
+    setStatus("Errore di inizializzazione: " + error.message);
+  }
+}
+
+initialize();
+</script>
 </body>
 </html>
