@@ -4,13 +4,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#075e54">
+  <meta name="theme-color" content="#071b20">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Nexora Chat">
+  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="apple-touch-icon" href="/logo.png">
   <title>Nexora Chat</title>
 
   <style>
     * { box-sizing: border-box; }
+
+    :root {
+      color-scheme: dark;
+      --bg: #07171c;
+      --panel: #0d252b;
+      --input: #091b20;
+      --border: #16434a;
+      --accent: #00e5c3;
+      --text: #f3ffff;
+      --muted: #a5c5c9;
+    }
 
     body {
       margin: 0;
@@ -19,94 +32,123 @@
       padding: 20px;
       display: grid;
       place-items: center;
-      background: #101b20;
-      color: #f5f7f8;
-      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(ellipse at 50% 0%, #06464a 0%, transparent 52%),
+        linear-gradient(145deg, #061317, #09232a 55%, #061317);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     main {
       width: 100%;
       max-width: 430px;
-      padding: 26px 22px;
-      border: 1px solid #34474d;
-      border-radius: 24px;
-      background: #202e34;
-      box-shadow: 0 20px 60px #0004;
+      padding: 28px 23px;
+      border: 1px solid #17616a;
+      border-radius: 25px;
+      background: linear-gradient(160deg, #102d33, #091d23);
+      box-shadow: 0 24px 80px #0008, 0 0 30px #00e5c30d;
     }
 
     .logo {
-      width: 58px;
-      height: 58px;
-      margin: 0 auto 16px;
-      display: grid;
-      place-items: center;
-      border-radius: 18px;
-      background: #078577;
-      font-size: 28px;
-      font-weight: bold;
+      display: block;
+      width: 112px;
+      height: 112px;
+      object-fit: contain;
+      margin: 0 auto 12px;
+      border-radius: 22px;
+      filter: drop-shadow(0 0 16px #00e5c326);
     }
 
     h1, .subtitle { text-align: center; }
-    h1 { margin-bottom: 8px; font-size: 25px; }
+
+    h1 {
+      margin: 8px 0;
+      font-size: 27px;
+      letter-spacing: 1px;
+    }
 
     .subtitle {
-      margin-bottom: 24px;
-      color: #c9dce2;
+      margin: 0 0 25px;
+      color: var(--muted);
       line-height: 1.5;
     }
+
+    h2 { font-size: 19px; }
 
     label {
       display: block;
       margin: 13px 0 6px;
-      color: #dce8eb;
+      color: #d8eeee;
       font-size: 13px;
     }
 
     input {
+      display: block;
       width: 100%;
       padding: 14px;
-      border: 1px solid #43585f;
-      border-radius: 11px;
+      border: 1px solid #245058;
+      border-radius: 12px;
       outline: none;
-      background: #142127;
+      background: var(--input);
       color: white;
       font-size: 16px;
+      transition: border-color .2s, box-shadow .2s;
     }
 
-    input:focus { border-color: #078577; }
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px #00e5c31c;
+    }
 
     button {
       width: 100%;
-      padding: 14px;
+      min-height: 46px;
+      padding: 13px 15px;
       margin-top: 12px;
-      border: 0;
-      border-radius: 11px;
-      background: #078577;
-      color: white;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      background: linear-gradient(110deg, #00bfa5, #00e5c3);
+      color: #03221f;
       font-size: 15px;
-      font-weight: bold;
+      font-weight: 700;
       cursor: pointer;
+      transition: transform .15s, filter .15s;
     }
 
-    button.secondary { background: #344c48; }
-    button.danger { background: #713d42; }
+    button:hover:not(:disabled) {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+
+    button.secondary {
+      background: #12363c;
+      border-color: #24545b;
+      color: #e9ffff;
+    }
+
+    button.danger {
+      background: #542b36;
+      border-color: #75404b;
+      color: #fff;
+    }
 
     button:disabled {
       opacity: .5;
       cursor: not-allowed;
+      transform: none;
     }
 
     .separator {
       height: 1px;
-      margin: 22px 0;
-      background: #394a50;
+      margin: 24px 0;
+      background: linear-gradient(90deg, transparent, #28616a, transparent);
     }
 
     .hidden { display: none !important; }
 
     #status {
-      margin-top: 18px;
-      color: #b9d7d9;
+      margin: 18px 0 0;
+      color: #a8e9e2;
       font-size: 13px;
       line-height: 1.5;
       overflow-wrap: anywhere;
@@ -114,21 +156,23 @@
     }
 
     .account {
-      padding: 14px;
-      border-radius: 12px;
-      background: #142127;
+      padding: 15px;
+      border: 1px solid #1a454c;
+      border-radius: 13px;
+      background: #091b20;
       overflow-wrap: anywhere;
     }
 
     .account strong {
       display: block;
       margin-bottom: 6px;
+      color: var(--accent);
     }
 
     .small {
-      color: #9db1b8;
+      color: #a5c5c9;
       font-size: 12px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .code-input {
@@ -137,14 +181,20 @@
       font-size: 24px;
       font-weight: bold;
     }
+
+    @media (max-width: 380px) {
+      body { padding: 12px; }
+      main { padding: 22px 17px; }
+      .logo { width: 94px; height: 94px; }
+    }
   </style>
 </head>
 
 <body>
 <main>
-  <div class="logo">N</div>
+  <img class="logo" src="/logo.png" alt="Logo Nexora Chat">
   <h1>Nexora Chat</h1>
-  <p class="subtitle">Accedi o crea il tuo account.</p>
+  <p class="subtitle">La tua conversazione, il tuo spazio.</p>
 
   <section id="authSection">
     <div id="registrationFields">
@@ -166,8 +216,8 @@
 
     <section id="verificationSection" class="hidden">
       <p class="small">
-        Abbiamo richiesto un codice di verifica per il tuo indirizzo email.
-        Inserisci il codice ricevuto. Scade dopo 10 minuti.
+        Inserisci il codice di verifica ricevuto via email.
+        Il codice scade dopo 10 minuti.
       </p>
 
       <label for="verificationCode">Codice email</label>
@@ -182,7 +232,9 @@
 
     <div class="separator"></div>
 
-    <label for="loginEmail">Email per accedere</label>
+    <h2>Accedi</h2>
+
+    <label for="loginEmail">Email</label>
     <input id="loginEmail" type="email" autocomplete="email"
       placeholder="nome@esempio.it">
 
@@ -312,14 +364,12 @@ function showApp(user) {
   appSection.classList.remove("hidden");
 
   const username = user.user_metadata?.username;
-
   $("welcome").textContent = username
     ? "Ciao, " + username
     : "Account Nexora";
 
   $("accountEmail").textContent = user.email || "";
   setStatus("Accesso effettuato.");
-
   checkExistingSubscription();
 }
 
@@ -386,7 +436,6 @@ async function requestEmailCode() {
     $("verificationCode").value = "";
     registrationFields.classList.add("hidden");
     verificationSection.classList.remove("hidden");
-
     $("loginEmail").value = fields.email;
 
     setStatus("Codice richiesto. Controlla la posta e lo spam.");
@@ -435,9 +484,7 @@ async function verifyEmailCode() {
       pendingSignup = null;
       registrationFields.classList.remove("hidden");
       verificationSection.classList.add("hidden");
-      setStatus(
-        "Account creato e email verificata. Accedi con email e password."
-      );
+      setStatus("Account creato e email verificata. Accedi con email e password.");
       return;
     }
 
@@ -511,7 +558,6 @@ async function loginAccount() {
     });
 
     if (error) throw error;
-
     showApp(data.user);
   } catch (error) {
     setStatus("Accesso non riuscito: " + error.message);
@@ -545,8 +591,7 @@ async function checkExistingSubscription() {
 
     await navigator.serviceWorker.register("/service-worker.js");
     const readyRegistration = await navigator.serviceWorker.ready;
-    const subscription =
-      await readyRegistration.pushManager.getSubscription();
+    const subscription = await readyRegistration.pushManager.getSubscription();
 
     testButton.disabled = !subscription ||
       Notification.permission !== "granted";
@@ -582,9 +627,7 @@ async function enableNotifications() {
     }
 
     if (Notification.permission === "denied") {
-      throw new Error(
-        "Notifiche bloccate nelle impostazioni del dispositivo."
-      );
+      throw new Error("Notifiche bloccate nelle impostazioni del dispositivo.");
     }
 
     const permission = await Notification.requestPermission();
@@ -594,8 +637,7 @@ async function enableNotifications() {
     }
 
     const registration = await getRegistration();
-    let subscription =
-      await registration.pushManager.getSubscription();
+    let subscription = await registration.pushManager.getSubscription();
 
     if (subscription) {
       const oldKey = subscription.options.applicationServerKey;
@@ -636,8 +678,7 @@ async function sendTestNotification() {
     }
 
     const registration = await getRegistration();
-    const subscription =
-      await registration.pushManager.getSubscription();
+    const subscription = await registration.pushManager.getSubscription();
 
     if (!subscription || Notification.permission !== "granted") {
       throw new Error("Premi prima Attiva notifiche.");
