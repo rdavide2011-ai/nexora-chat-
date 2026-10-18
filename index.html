@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#171720">
+<meta name="theme-color" content="#111216">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Nexora Chat">
 <link rel="icon" type="image/png" href="/logo.png">
@@ -13,214 +13,225 @@
 <style>
 :root {
   color-scheme: dark;
-  --bg:#171720;
-  --panel:#20202c;
-  --panel2:#292936;
-  --border:#343441;
-  --text:#f7f7fc;
-  --muted:#9292a6;
-  --accent:#20d6c3;
-  --accent2:#18bda9;
-  --other:#2c2c3a;
-  --me:#20cbb9;
-  --meText:#062724;
+  --bg:#111216;
+  --rail:#15171a;
+  --panel:#191b1f;
+  --panel2:#202328;
+  --panel3:#25282d;
+  --border:#2a2d32;
+  --text:#f4f5f7;
+  --muted:#9299a3;
+  --accent:#20d6c4;
+  --accent-dark:#083d39;
+  --mine:#32c4d7;
+  --mine-text:#06262b;
+  --other:#282c31;
+  --shadow:0 20px 70px #0005;
 }
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
 button,input,textarea{font:inherit}
-button{cursor:pointer}
+button{cursor:pointer;color:inherit}
 button:disabled{opacity:.5;cursor:not-allowed}
 .hidden{display:none!important}
 button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-input,textarea{color:var(--text)}
-button{color:inherit}
-.icon-btn{border:0;background:transparent;color:var(--muted);width:40px;height:40px;border-radius:13px;font-size:21px;display:grid;place-items:center}
-.icon-btn:hover{background:var(--panel2);color:var(--accent)}
-.primary{background:var(--accent);color:#062724;border:0;border-radius:12px;padding:13px 16px;font-weight:750}
-.secondary{background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:12px 15px}
-.field{width:100%;border:1px solid var(--border);background:var(--panel2);border-radius:13px;padding:14px;outline:none;font-size:15px}
+button,input,textarea{ -webkit-tap-highlight-color:transparent }
+.icon-btn{width:42px;height:42px;display:grid;place-items:center;flex:none;border:1px solid var(--border);border-radius:50%;background:transparent;color:#c4c9d0;font-size:19px}
+.icon-btn:hover{background:var(--panel3);color:var(--accent)}
+.primary{border:0;border-radius:12px;background:var(--accent);color:#062a26;font-weight:750;padding:13px 16px}
+.secondary{border:1px solid var(--border);border-radius:12px;background:var(--panel2);color:var(--text);padding:12px 15px}
+.field{display:block;width:100%;border:1px solid var(--border);border-radius:12px;background:var(--panel2);padding:14px;color:var(--text);outline:none}
 .field:focus{border-color:var(--accent)}
-label{display:block;color:var(--muted);font-size:13px;margin:15px 0 7px}
-.small{font-size:12px;line-height:1.5;color:var(--muted)}
-.separator{height:1px;background:var(--border);margin:22px 0}
-#status{font-size:13px;line-height:1.5;text-align:center;color:var(--accent);overflow-wrap:anywhere;margin:16px 0 0}
+label{display:block;margin:14px 0 6px;font-size:13px;color:var(--muted)}
+.small{font-size:12px;line-height:1.55;color:var(--muted)}
+.separator{height:1px;background:var(--border);margin:23px 0}
+#status{margin:16px 0 0;text-align:center;font-size:13px;line-height:1.5;color:var(--accent);overflow-wrap:anywhere}
 
-/* Login */
-#authSection{height:100%;overflow:auto;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at top,#203d4030,transparent 60%),var(--bg)}
-.auth-card{width:100%;max-width:410px;background:var(--panel);border:1px solid var(--border);border-radius:25px;padding:30px;box-shadow:0 25px 90px #0003}
+/* AUTENTICAZIONE */
+#authSection{height:100%;overflow:auto;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at top,#123e4030,transparent 60%),var(--bg)}
+.auth-card{width:100%;max-width:410px;padding:30px;background:var(--panel);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow)}
 .logo{display:block;width:82px;height:82px;object-fit:contain;margin:0 auto 12px}
-.auth-card h1{text-align:center;font-size:29px;letter-spacing:-1px;margin:8px 0}
-.auth-card h1 span{color:var(--accent)}
-.subtitle{text-align:center;color:var(--muted);font-size:14px;margin:0 0 26px}
+.auth-card h1{text-align:center;margin:7px 0;font-size:29px;letter-spacing:-1px}
+.accent{color:var(--accent)}
+.subtitle{text-align:center;color:var(--muted);font-size:14px;margin:0 0 25px}
 .auth-card h2{font-size:18px;margin:0 0 10px}
 .auth-card button{width:100%;margin-top:12px}
 .code-input{text-align:center;letter-spacing:8px;font-size:24px;font-weight:800}
 
-/* App shell */
+/* BARRA SUPERIORE */
 #appSection{height:100dvh;width:100%;display:flex;flex-direction:column}
-.topbar{height:68px;flex:none;display:flex;align-items:center;padding:0 22px;gap:22px;background:var(--panel);border-bottom:1px solid var(--border)}
-.brand{width:275px;flex:none;display:flex;align-items:center;gap:12px}
+.topbar{height:70px;flex:none;display:flex;align-items:center;gap:20px;padding:0 20px;background:var(--panel);border-bottom:1px solid var(--border)}
+.brand{width:285px;flex:none;display:flex;align-items:center;gap:11px}
 .brand img{width:39px;height:39px;object-fit:contain}
-.brand-title{font-weight:850;font-size:20px;letter-spacing:-.7px}
-.brand-title span{color:var(--accent)}
-.global-search{flex:1;max-width:520px;margin:auto;position:relative}
-.global-search input{width:100%;border:1px solid var(--border);background:var(--panel2);border-radius:14px;padding:12px 15px 12px 42px;outline:none}
-.global-search .search-icon{position:absolute;left:14px;top:10px;color:var(--muted);font-size:20px}
+.brand-name{font-size:20px;font-weight:800;letter-spacing:-.7px}
+.brand-name span{color:var(--accent)}
+.global-search{flex:1;max-width:480px;margin:auto;position:relative}
+.global-search input{width:100%;padding:12px 15px 12px 40px;border:1px solid var(--border);border-radius:13px;background:var(--panel2);color:var(--text);outline:none}
+.global-search .search-icon{position:absolute;left:14px;top:9px;color:var(--muted);font-size:21px}
 .top-actions{display:flex;align-items:center;gap:8px}
-.avatar{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;flex:none;background:#6455a4;color:white;font-size:16px;font-weight:800;position:relative;overflow:hidden}
-.avatar.online:after{content:"";position:absolute;right:0;top:1px;width:10px;height:10px;background:var(--accent);border:2px solid var(--panel);border-radius:50%}
-.workspace{display:flex;flex:1;min-height:0;gap:0}
+.avatar{position:relative;width:44px;height:44px;flex:none;display:grid;place-items:center;border-radius:50%;background:#6b65a8;color:white;font-weight:800;font-size:15px;overflow:hidden}
+.avatar.online:after{content:"";position:absolute;right:0;top:1px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--panel)}
 
-/* Sidebar */
-.rail{width:76px;flex:none;background:#17171e;border-right:1px solid #2b2b35;display:flex;align-items:center;flex-direction:column;padding:19px 0 14px;gap:14px}
-.rail-logo{width:44px;height:44px;object-fit:contain;margin-bottom:25px}
-.rail-btn{width:43px;height:43px;border:0;border-radius:14px;background:transparent;color:#858597;font-size:21px;display:grid;place-items:center}
-.rail-btn.active,.rail-btn:hover{background:#203b3b;color:var(--accent)}
+/* STRUTTURA DESKTOP */
+.workspace{display:flex;flex:1;min-height:0;min-width:0}
+.rail{width:76px;flex:none;display:flex;align-items:center;flex-direction:column;gap:13px;padding:18px 0 12px;background:var(--rail);border-right:1px solid var(--border)}
+.rail-logo{width:42px;height:42px;object-fit:contain;margin-bottom:25px}
+.rail-btn{width:43px;height:43px;display:grid;place-items:center;border:0;border-radius:14px;background:transparent;color:#9299a3;font-size:21px}
+.rail-btn:hover,.rail-btn.active{background:#183b3a;color:var(--accent)}
 .rail-spacer{flex:1}
-.sidebar{width:335px;flex:none;display:flex;flex-direction:column;min-height:0;background:var(--panel);border-right:1px solid var(--border)}
-.side-header{padding:22px 18px 13px;display:flex;align-items:center;justify-content:space-between}
-.side-header h2{margin:0;font-size:23px;letter-spacing:-.7px}
-.side-header .icon-btn{background:var(--accent);color:#062724}
-.side-search{padding:0 16px 19px}
-.side-search input{width:100%;background:var(--panel2);border:1px solid var(--border);border-radius:13px;padding:12px 14px 12px 39px;outline:none}
-.side-search-wrap{position:relative}
-.side-search-wrap span{position:absolute;left:13px;top:9px;color:var(--muted);font-size:19px}
-.section-title{padding:0 17px 12px;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:750}
-.section-title .muted{font-size:12px;font-weight:400}
-.online-list{display:flex;gap:15px;overflow:auto;padding:0 16px 20px}
-.online-person{width:50px;flex:none;text-align:center;font-size:11px;color:var(--muted)}
-.online-person .avatar{width:47px;height:47px;margin:0 auto 7px;font-size:15px}
-.filters{display:flex;gap:7px;padding:0 16px 13px}
-.filter{font-size:12px;white-space:nowrap;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--muted);padding:8px 12px}
-.filter.active{background:#1c4745;color:var(--accent);border-color:#276c64}
-.conversation-list{overflow:auto;flex:1;padding:0 7px 10px}
-.conversation{display:flex;align-items:center;gap:11px;padding:13px 10px;border-radius:13px;cursor:pointer}
+.sidebar{width:330px;flex:none;display:flex;flex-direction:column;min-height:0;background:var(--panel);border-right:1px solid var(--border)}
+.side-heading{display:flex;align-items:center;justify-content:space-between;padding:20px 17px 13px}
+.side-heading h2{font-size:22px;margin:0;letter-spacing:-.5px}
+.new-chat{width:39px;height:39px;border:0;border-radius:12px;background:var(--accent);color:#062a26;font-size:25px}
+.side-search{padding:0 15px 18px}
+.search-wrap{position:relative}
+.search-wrap span{position:absolute;left:13px;top:8px;color:var(--muted);font-size:20px}
+.search-wrap input{width:100%;padding:12px 12px 12px 39px;background:var(--panel2);border:1px solid var(--border);border-radius:12px;color:var(--text);outline:none}
+.section-title{display:flex;align-items:center;justify-content:space-between;padding:0 16px 12px;font-size:14px;font-weight:750}
+.section-title .muted{font-size:11px;color:var(--muted);font-weight:400}
+.online-list{display:flex;gap:14px;overflow:auto;padding:0 15px 20px;scrollbar-width:none}
+.online-list::-webkit-scrollbar{display:none}
+.online-person{width:48px;flex:none;text-align:center;font-size:11px;color:var(--muted);cursor:pointer}
+.online-person .avatar{width:46px;height:46px;margin:0 auto 7px}
+.filters{display:flex;gap:6px;padding:0 15px 12px}
+.filter{padding:8px 11px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--muted);font-size:11px;white-space:nowrap}
+.filter.active{background:var(--accent-dark);border-color:#28615b;color:var(--accent)}
+.conversation-list{flex:1;min-height:0;overflow:auto;padding:0 7px 10px}
+.conversation{display:flex;align-items:center;gap:10px;padding:12px 9px;border-radius:12px;cursor:pointer;border-left:3px solid transparent}
 .conversation:hover{background:var(--panel2)}
-.conversation.active{background:#30303c;box-shadow:inset 3px 0 var(--accent)}
-.conversation .avatar{width:45px;height:45px;font-size:14px}
+.conversation.active{background:#292d32;border-left-color:var(--accent)}
+.conversation .avatar{width:45px;height:45px}
 .conversation-copy{flex:1;min-width:0}
 .conversation-top{display:flex;justify-content:space-between;align-items:center;gap:5px}
-.conversation-name{font-size:14px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.conversation-name{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .conversation-time{font-size:10px;color:var(--muted);white-space:nowrap}
-.conversation-preview{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:5px}
-.unread{background:var(--accent);color:#062724;font-size:10px;font-weight:800;border-radius:20px;padding:3px 6px}
-.sidebar-bottom{border-top:1px solid var(--border);padding:11px;display:flex;gap:8px}
-.sidebar-bottom button{flex:1;font-size:12px;padding:10px 4px}
+.conversation-preview{margin-top:5px;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.unread{padding:3px 6px;border-radius:20px;background:var(--accent);color:#062a26;font-size:10px;font-weight:800}
+.sidebar-bottom{display:flex;gap:8px;padding:11px;border-top:1px solid var(--border)}
+.sidebar-bottom button{flex:1;padding:10px 4px;font-size:11px}
 
-/* Chat */
-.chat-panel{flex:1;min-width:0;display:flex;flex-direction:column;background:#191920}
-.chat-header{height:76px;flex:none;padding:0 22px;display:flex;align-items:center;gap:13px;background:var(--panel);border-bottom:1px solid var(--border)}
-.chat-header .avatar{width:45px;height:45px}
+/* CHAT CENTRALE */
+.chat-panel{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;background:#111315}
+.chat-header{height:76px;flex:none;display:flex;align-items:center;gap:12px;padding:0 20px;background:var(--panel);border-bottom:1px solid var(--border)}
+.chat-header .avatar{width:44px;height:44px}
 .chat-person{flex:1;min-width:0}
-.chat-person strong{display:block;font-size:16px}
-.chat-person span{display:block;color:var(--accent);font-size:12px;margin-top:4px}
-.chat-actions{display:flex;gap:6px}
-.chat-actions .icon-btn{border:1px solid var(--border);border-radius:50%;width:43px;height:43px}
+.chat-person strong{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-person span{display:block;font-size:12px;color:var(--accent);margin-top:4px}
+.chat-actions{display:flex;gap:7px}
 .mobile-back{display:none}
-.messages{flex:1;min-height:0;overflow-y:auto;padding:18px clamp(18px,3vw,48px);display:flex;flex-direction:column;gap:12px}
-.day-label{align-self:center;font-size:12px;color:var(--muted);margin:0 0 10px;padding:7px 14px;border-radius:20px;background:var(--panel)}
-.message-row{display:flex;flex-direction:column;align-self:flex-start;max-width:min(72%,600px)}
+.messages{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:11px;padding:20px clamp(17px,3vw,45px);background:radial-gradient(ellipse at center,#1720252a,transparent 75%)}
+.day-label{align-self:center;padding:7px 13px;border-radius:10px;background:#1c2024;color:var(--muted);font-size:11px;margin:0 0 12px}
+.message-row{max-width:min(75%,600px);align-self:flex-start;display:flex;flex-direction:column}
 .message-row.mine{align-self:flex-end}
-.message-bubble{background:var(--other);border-radius:17px 17px 17px 5px;padding:12px 15px;font-size:14px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
-.message-row.mine .message-bubble{background:var(--me);color:var(--meText);border-radius:17px 17px 5px 17px}
-.message-meta{font-size:10px;color:var(--muted);margin:5px 5px 0}
+.message-bubble{padding:11px 14px;border-radius:15px 15px 15px 4px;background:var(--other);font-size:14px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+.message-row.mine .message-bubble{background:var(--mine);color:var(--mine-text);border-radius:15px 15px 4px 15px}
+.message-meta{margin:4px 5px 0;font-size:10px;color:var(--muted)}
 .message-row.mine .message-meta{text-align:right}
-.composer-wrap{padding:14px 20px 18px;border-top:1px solid #292932;background:#191920}
-.composer{max-width:1100px;margin:auto;display:flex;gap:10px;align-items:flex-end}
-.composer .attach{width:42px;height:44px;flex:none}
-.composer textarea{flex:1;min-width:0;min-height:46px;max-height:130px;resize:none;border:1px solid var(--border);border-radius:15px;background:var(--panel2);padding:13px 15px;outline:none;line-height:1.4;font-size:15px}
-.send-btn{width:47px;height:47px;flex:none;border:0;border-radius:15px;background:var(--accent);color:#062724;font-size:20px;font-weight:900}
-.composer-hint{text-align:center;font-size:10px;color:var(--muted);margin-top:8px}
-.details{width:270px;flex:none;background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:auto}
-.details-header{height:76px;flex:none;border-bottom:1px solid var(--border);padding:0 17px;display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:750}
-.details-profile{text-align:center;padding:25px 14px}
-.details-profile .avatar{width:88px;height:88px;margin:0 auto 12px;font-size:27px}
-.details-profile h3{margin:0;font-size:17px}
-.details-profile p{margin:6px 0;color:var(--accent);font-size:12px}
-.detail-section{padding:10px 15px 18px}
-.detail-title{display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:13px;margin-bottom:12px}
-.detail-title span{font-size:11px;color:var(--muted);font-weight:400}
-.media-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.media-tile{aspect-ratio:1;border-radius:11px;background:var(--panel2);display:grid;place-items:center;font-size:25px;color:var(--accent)}
-.file-tile{padding:11px;border-radius:12px;background:var(--panel2);display:flex;gap:9px;align-items:center;font-size:12px;margin-top:8px;overflow-wrap:anywhere}
-.file-icon{color:var(--accent);font-size:20px}
-.empty-state{margin:auto;text-align:center;max-width:340px;padding:25px}
-.empty-state .symbol{font-size:44px;color:var(--accent);margin-bottom:13px}
-.empty-state h2{font-size:20px;margin:0 0 8px}
-.empty-state p{color:var(--muted);font-size:13px;line-height:1.6}
-#settingsPanel{position:fixed;inset:0;z-index:30;background:#0009;display:grid;place-items:center;padding:20px}
-.settings-card{width:100%;max-width:420px;background:var(--panel);border:1px solid var(--border);border-radius:22px;padding:24px;box-shadow:0 20px 70px #0007}
-.settings-card h2{margin-top:0}
-.settings-card button{width:100%;margin-top:10px}
-.account{padding:13px;border-radius:12px;background:var(--panel2);overflow-wrap:anywhere}
-.account strong{display:block;margin-bottom:5px;color:var(--accent)}
+.composer-wrap{padding:13px 18px 16px;background:#17191c;border-top:1px solid #26292d}
+.composer{display:flex;align-items:flex-end;gap:9px;max-width:1050px;margin:auto}
+.composer textarea{flex:1;min-width:0;min-height:46px;max-height:125px;resize:none;padding:13px 15px;border:1px solid var(--border);border-radius:14px;background:#202328;color:var(--text);outline:none;font-size:14px;line-height:1.4}
+.send-btn{width:46px;height:46px;flex:none;border:0;border-radius:13px;background:var(--accent);color:#062a26;font-size:20px;font-weight:900}
+.composer-hint{text-align:center;font-size:10px;color:var(--muted);margin-top:7px}
 
-/* Responsive */
-@media(min-width:1500px){
-  .sidebar{width:375px}
-  .details{width:300px}
-  .topbar{height:76px}
-  .workspace{max-width:2200px;width:100%;margin:auto}
+/* DETTAGLI CONTATTO */
+.details{width:270px;flex:none;display:flex;flex-direction:column;overflow:auto;background:var(--panel);border-left:1px solid var(--border)}
+.details-header{height:76px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid var(--border);font-size:14px;font-weight:750}
+.details-profile{text-align:center;padding:24px 12px}
+.details-profile .avatar{width:88px;height:88px;margin:0 auto 12px;font-size:27px}
+.details-profile h3{margin:0;font-size:16px}
+.details-profile p{margin:6px 0 0;font-size:12px;color:var(--accent)}
+.detail-section{padding:10px 14px 18px}
+.detail-title{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:750;margin-bottom:12px}
+.detail-title span{font-size:11px;color:var(--accent);font-weight:400}
+.media-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.media-tile{aspect-ratio:1;border-radius:9px;background:linear-gradient(145deg,#233f46,#253039);display:grid;place-items:center;font-size:25px;color:var(--accent)}
+.file-tile{display:flex;align-items:center;gap:9px;padding:11px;margin-top:8px;border-radius:10px;background:var(--panel2);font-size:11px;overflow-wrap:anywhere}
+.file-icon{font-size:20px;color:var(--accent)}
+.detail-row{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid var(--border);font-size:12px}
+.detail-row span:first-child{font-size:17px}
+
+/* MOBILE */
+.bottom-nav{display:none}
+@media(min-width:1600px){
+  .sidebar{width:365px}
+  .details{width:295px}
+  .topbar{height:76px;padding:0 26px}
+  .workspace{max-width:2300px;width:100%;margin:auto}
+  .messages{padding-left:clamp(40px,4vw,85px);padding-right:clamp(40px,4vw,85px)}
 }
-@media(max-width:1150px){
-  .details{display:none}
+@media(max-width:1250px){
+  .details{width:235px}
+  .sidebar{width:295px}
   .brand{width:245px}
-  .sidebar{width:310px}
+  .details-profile .avatar{width:76px;height:76px}
+}
+@media(max-width:1000px){
+  .details{display:none}
+  .sidebar{width:300px}
+  .brand{width:225px}
 }
 @media(max-width:760px){
-  .topbar{height:60px;padding:0 13px;gap:10px}
+  .topbar{height:60px;padding:0 12px;gap:9px}
   .brand{width:auto;flex:1;gap:8px}
   .brand img{width:34px;height:34px}
-  .brand-title{font-size:18px}
+  .brand-name{font-size:17px}
   .global-search{display:none}
-  .top-actions{gap:3px}
-  .top-actions .icon-btn{width:36px;height:36px}
+  .top-actions{gap:2px}
+  .top-actions .icon-btn{width:35px;height:35px;border:0}
   .workspace{position:relative;overflow:hidden}
   .rail{display:none}
   .sidebar{width:100%;border:0;display:flex}
   .chat-panel{display:none;width:100%;border:0}
   #appSection.chat-open .sidebar{display:none}
   #appSection.chat-open .chat-panel{display:flex}
-  .side-header{padding:20px 17px 13px}
-  .side-header h2{font-size:27px}
-  .side-search{padding-bottom:17px}
-  .online-list{gap:16px}
-  .online-person{width:52px}
-  .conversation{padding:14px 11px}
-  .conversation .avatar{width:48px;height:48px}
-  .chat-header{height:70px;padding:0 11px;gap:8px}
-  .mobile-back{display:grid;place-items:center;border:0;background:transparent;color:var(--accent);font-size:30px;width:30px;height:40px}
+  .side-heading{padding:19px 16px 13px}
+  .side-heading h2{font-size:26px}
+  .side-search{padding-bottom:18px}
+  .online-list{gap:15px;padding-bottom:20px}
+  .online-person{width:51px}
+  .online-person .avatar{width:47px;height:47px}
+  .conversation{padding:13px 10px}
+  .conversation .avatar{width:47px;height:47px}
+  .chat-header{height:66px;padding:0 10px;gap:8px}
+  .mobile-back{display:grid;place-items:center;width:28px;height:40px;border:0;background:transparent;color:var(--accent);font-size:30px}
   .chat-header .avatar{width:41px;height:41px}
-  .chat-person strong{font-size:15px}
-  .chat-actions .icon-btn{width:35px;height:35px;border:0;font-size:20px}
-  .messages{padding:18px 13px;gap:12px}
-  .message-row{max-width:85%}
-  .message-bubble{font-size:14px;padding:11px 13px}
+  .chat-person strong{font-size:14px}
+  .chat-actions{gap:1px}
+  .chat-actions .icon-btn{width:34px;height:34px;border:0;font-size:17px}
+  .messages{padding:18px 12px;gap:11px}
+  .message-row{max-width:86%}
+  .message-bubble{font-size:14px;padding:10px 12px}
   .composer-wrap{padding:10px 10px calc(10px + env(safe-area-inset-bottom))}
-  .composer{gap:6px}
-  .composer .attach{display:none}
-  .composer textarea{font-size:16px;min-height:45px}
-  .send-btn{width:45px;height:45px}
+  .composer{gap:7px}
+  .composer textarea{min-height:45px;font-size:16px}
+  .send-btn{width:44px;height:44px}
   .composer-hint{display:none}
-  .bottom-nav{display:flex}
-}
-.bottom-nav{display:none}
-@media(max-width:760px){
-  .bottom-nav{height:66px;flex:none;align-items:center;justify-content:space-around;background:var(--panel);border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom)}
-  .bottom-nav button{border:0;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:58px;font-size:10px}
-  .bottom-nav button span{font-size:22px;line-height:1.1}
+  .bottom-nav{height:64px;flex:none;display:flex;align-items:center;justify-content:space-around;background:var(--panel);border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom)}
+  .bottom-nav button{min-width:58px;border:0;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:10px}
+  .bottom-nav button span{font-size:21px;line-height:1}
   .bottom-nav button.active{color:var(--accent)}
   #appSection.chat-open .bottom-nav{display:none}
 }
 @media(max-width:380px){
-  .topbar{padding:0 8px}
-  .brand-title{font-size:16px}
-  .top-actions .icon-btn{width:32px}
-  .side-header h2{font-size:24px}
-  .filters{gap:5px;padding-left:10px}
-  .filter{padding:7px 9px}
+  .topbar{padding:0 7px}
+  .brand-name{font-size:15px}
+  .top-actions .icon-btn{width:30px}
+  .side-heading h2{font-size:24px}
+  .filters{gap:4px;padding-left:10px;padding-right:10px}
+  .filter{padding:7px 9px;font-size:10px}
+  .chat-actions .icon-btn{width:29px}
 }
+#settingsPanel{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:20px;background:#0009}
+.settings-card{width:100%;max-width:410px;padding:24px;border:1px solid var(--border);border-radius:20px;background:var(--panel);box-shadow:var(--shadow)}
+.settings-card h2{margin-top:0}
+.settings-card button{width:100%;margin-top:10px}
+.account{padding:13px;border-radius:12px;background:var(--panel2);overflow-wrap:anywhere}
+.account strong{display:block;color:var(--accent);margin-bottom:5px}
+.empty-state{margin:auto;max-width:330px;padding:24px;text-align:center}
+.empty-state .symbol{font-size:42px;color:var(--accent);margin-bottom:12px}
+.empty-state h2{font-size:20px;margin:0 0 8px}
+.empty-state p{font-size:13px;line-height:1.6;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -228,9 +239,8 @@ label{display:block;color:var(--muted);font-size:13px;margin:15px 0 7px}
 <section id="authSection">
   <div class="auth-card">
     <img class="logo" src="/logo.png" alt="Nexora">
-    <h1>Nexora <span>Chat</span></h1>
+    <h1>Nexora <span class="accent">Chat</span></h1>
     <p class="subtitle">La tua conversazione, il tuo spazio.</p>
-
     <div id="registrationFields">
       <h2>Crea il tuo account</h2>
       <label for="username">Username</label>
@@ -241,7 +251,6 @@ label{display:block;color:var(--muted);font-size:13px;margin:15px 0 7px}
       <input class="field" id="password" type="password" autocomplete="new-password" minlength="8" placeholder="Almeno 8 caratteri">
       <button class="primary" id="requestCodeButton">Crea account</button>
     </div>
-
     <div id="verificationSection" class="hidden">
       <p class="small">Inserisci il codice ricevuto via email. Il codice scade dopo 10 minuti.</p>
       <label for="verificationCode">Codice di verifica</label>
@@ -250,7 +259,6 @@ label{display:block;color:var(--muted);font-size:13px;margin:15px 0 7px}
       <button class="secondary" id="resendCodeButton">Invia un nuovo codice</button>
       <button class="secondary" id="backButton">Indietro</button>
     </div>
-
     <div class="separator"></div>
     <h2>Accedi</h2>
     <label for="loginEmail">Email oppure username</label>
@@ -266,7 +274,7 @@ label{display:block;color:var(--muted);font-size:13px;margin:15px 0 7px}
   <header class="topbar">
     <div class="brand">
       <img src="/logo.png" alt="">
-      <div class="brand-title">Nexora <span>Chat</span></div>
+      <div class="brand-name">Nexora <span>Chat</span></div>
     </div>
     <div class="global-search">
       <span class="search-icon">⌕</span>
@@ -282,39 +290,35 @@ label{display:block;color:var(--muted);font-size:13px;margin:15px 0 7px}
   <div class="workspace">
     <nav class="rail" aria-label="Navigazione">
       <img class="rail-logo" src="/logo.png" alt="Nexora">
-      <button class="rail-btn" title="Home" id="railHome">⌂</button>
-      <button class="rail-btn active" title="Messaggi" id="railMessages">▣</button>
-      <button class="rail-btn" title="Contatti" id="railContacts">♧</button>
-      <button class="rail-btn" title="Chiamate" id="railCalls">♧</button>
-      <button class="rail-btn" title="Impostazioni" id="railSettings">⚙</button>
+      <button class="rail-btn" id="railHome" title="Home">⌂</button>
+      <button class="rail-btn active" id="railMessages" title="Messaggi">▣</button>
+      <button class="rail-btn" id="railContacts" title="Contatti">♧</button>
+      <button class="rail-btn" id="railCalls" title="Chiamate">♧</button>
+      <button class="rail-btn" id="railSettings" title="Impostazioni">⚙</button>
       <div class="rail-spacer"></div>
       <button class="rail-btn" id="railAdd" title="Nuova chat">＋</button>
       <div class="avatar" id="railAvatar">N</div>
     </nav>
 
-    <aside class="sidebar" id="sidebar">
-      <div class="side-header">
+    <aside class="sidebar">
+      <div class="side-heading">
         <h2>Messaggi</h2>
-        <button class="icon-btn" id="newChatButton" title="Nuova conversazione" aria-label="Nuova conversazione">＋</button>
+        <button class="new-chat" id="newChatButton" title="Nuova conversazione" aria-label="Nuova conversazione">＋</button>
       </div>
-
       <div class="side-search">
-        <div class="side-search-wrap">
+        <div class="search-wrap">
           <span>⌕</span>
           <input id="sideSearch" placeholder="Cerca o inizia una chat..." aria-label="Cerca chat">
         </div>
       </div>
-
-      <div class="section-title"><span>Online adesso</span><span class="muted">Persone</span></div>
+      <div class="section-title"><span>Online adesso</span><span class="muted">Mostra tutti ›</span></div>
       <div class="online-list" id="onlineList"></div>
-
       <div class="section-title"><span>Conversazioni</span><span class="muted" id="chatCount">0</span></div>
       <div class="filters">
         <button class="filter active" data-filter="all">Tutte</button>
         <button class="filter" data-filter="unread">Non lette</button>
         <button class="filter" data-filter="favorites">Preferite</button>
       </div>
-
       <div class="conversation-list" id="conversationList"></div>
       <div class="sidebar-bottom">
         <button class="secondary" id="notificationsButton">♧ Notifiche</button>
@@ -333,7 +337,7 @@ label{display:block;color:var(--muted);font-size:13px;margin:15px 0 7px}
         <div class="chat-actions">
           <button class="icon-btn" id="callButton" title="Chiamata">♧</button>
           <button class="icon-btn" id="videoButton" title="Videochiamata">▣</button>
-          <button class="icon-btn" id="chatInfoButton" title="Preferiti">⋮</button>
+          <button class="icon-btn" id="chatInfoButton" title="Aggiungi ai preferiti">⋮</button>
         </div>
       </header>
       <div class="messages" id="messages">
@@ -341,7 +345,7 @@ label{display:block;color:var(--muted);font-size:13px;margin:15px 0 7px}
       </div>
       <div class="composer-wrap">
         <form class="composer" id="composer">
-          <button class="icon-btn attach" type="button" id="attachButton" title="Allegato">⌁</button>
+          <button class="icon-btn" type="button" id="attachButton" title="Allegato">⌁</button>
           <textarea id="messageInput" rows="1" placeholder="Scrivi un messaggio..." aria-label="Scrivi un messaggio"></textarea>
           <button class="send-btn" type="submit" aria-label="Invia messaggio">➤</button>
         </form>
@@ -350,29 +354,33 @@ label{display:block;color:var(--muted);font-size:13px;margin:15px 0 7px}
     </section>
 
     <aside class="details" id="details">
-      <div class="details-header"><span>Dettagli contatto</span><button class="icon-btn" id="closeDetails" title="Chiudi dettagli">×</button></div>
+      <div class="details-header"><span>Dettagli contatto</span><button class="icon-btn" id="closeDetails" title="Nascondi dettagli">×</button></div>
       <div class="details-profile">
         <div class="avatar online" id="detailsAvatar">N</div>
         <h3 id="detailsName">Nexora</h3>
-        <p>Disponibile</p>
+        <p>Online</p>
       </div>
       <div class="detail-section">
-        <div class="detail-title">Media <span>Anteprima</span></div>
+        <div class="detail-title">Media <span>Mostra tutti</span></div>
         <div class="media-grid">
           <div class="media-tile">▧</div><div class="media-tile">▤</div>
           <div class="media-tile">▧</div><div class="media-tile">＋</div>
         </div>
       </div>
       <div class="detail-section">
-        <div class="detail-title">File condivisi <span>Anteprima</span></div>
-        <div class="file-tile"><span class="file-icon">▤</span><span>Documenti e allegati</span></div>
+        <div class="detail-title">File condivisi <span>Documenti</span></div>
+        <div class="file-tile"><span class="file-icon">▤</span><span>File condivisi</span></div>
+        <div class="detail-row"><span>♧</span><span>Link condivisi</span></div>
+        <div class="detail-row"><span>♧</span><span>Messaggi importanti</span></div>
+        <div class="detail-row"><span>♧</span><span>Notifiche</span></div>
+        <div class="detail-row"><span>◐</span><span>Tema chat</span></div>
       </div>
     </aside>
   </div>
 
   <nav class="bottom-nav" aria-label="Navigazione mobile">
     <button id="mobileHome"><span>⌂</span>Home</button>
-    <button class="active" id="mobileMessages"><span>●</span>Messaggi</button>
+    <button class="active" id="mobileMessages"><span>●</span>Chat</button>
     <button id="mobileContacts"><span>♧</span>Contatti</button>
     <button id="mobileSettings"><span>⚙</span>Impostazioni</button>
   </nav>
@@ -405,33 +413,36 @@ const client=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
 });
 const $=id=>document.getElementById(id);
 
-let currentUser=null;
-let pendingSignup=null;
-let isBusy=false;
-let activeChatId=null;
-let activeFilter="all";
-let notificationSubscription=null;
-let themeMode="auto";
+let currentUser=null,pendingSignup=null,isBusy=false,activeChatId=null;
+let activeFilter="all",notificationSubscription=null,themeMode="dark";
 
-const initialChats=[
-  {id:"demo1",name:"Nexora Team",avatar:"N",color:"#6654a6",favorite:true,unread:2,online:true,messages:[
-    {text:"Benvenuto su Nexora Chat! 👋",mine:false,time:"12:00"},
-    {text:"Questa è la nuova interfaccia.",mine:false,time:"12:01"},
-    {text:"Possiamo iniziare a parlare.",mine:true,time:"12:03"},
-    {text:"Perfetto! ✨",mine:false,time:"12:04"}
+const sampleChats=[
+  {id:"demo1",name:"Luca Rossi",avatar:"LR",color:"#647da5",online:true,favorite:true,unread:2,messages:[
+    {text:"Ehi, come va?",mine:false,time:"14:28"},
+    {text:"Hai visto il nuovo design di Nexora?",mine:false,time:"14:28"},
+    {text:"Sì, è bellissimo! 😍",mine:true,time:"14:29"},
+    {text:"Anteprima Design.png",mine:false,time:"14:30"},
+    {text:"Fammi sapere cosa ne pensi.",mine:false,time:"14:30"},
+    {text:"Perfetto, lo guardo subito!",mine:true,time:"14:31"},
+    {text:"Va bene, ci sentiamo dopo!",mine:true,time:"14:32"}
   ]},
-  {id:"demo2",name:"Andrea",avatar:"A",color:"#537aa6",favorite:false,unread:0,online:true,messages:[
-    {text:"Ehi, hai visto il progetto?",mine:false,time:"11:20"},
-    {text:"Sì, mi piace molto!",mine:true,time:"11:22"}
+  {id:"demo2",name:"Giulia Ferri",avatar:"GF",color:"#a47783",online:true,favorite:false,unread:1,messages:[
+    {text:"Perfetto! 👍",mine:false,time:"14:20"}
   ]},
-  {id:"demo3",name:"Design Studio",avatar:"D",color:"#9561a0",favorite:true,unread:0,online:true,messages:[
-    {text:"Stiamo lavorando al design.",mine:false,time:"10:10"}
+  {id:"demo3",name:"Progetto Nexora",avatar:"N",color:"#7465bb",online:true,favorite:true,unread:0,messages:[
+    {text:"Tu: Ecco il file del progetto.",mine:true,time:"13:15"}
   ]},
-  {id:"demo4",name:"Marco",avatar:"M",color:"#a66e47",favorite:false,unread:0,online:false,messages:[
-    {text:"Ci sentiamo più tardi?",mine:false,time:"Ieri"}
+  {id:"demo4",name:"Andrea Bianchi",avatar:"AB",color:"#4b8a70",online:true,favorite:false,unread:0,messages:[
+    {text:"Sì, nessun problema!",mine:false,time:"12:48"}
   ]},
-  {id:"demo5",name:"Giulia",avatar:"G",color:"#388d80",favorite:false,unread:1,online:false,messages:[
-    {text:"Ti mando tutto appena posso.",mine:false,time:"Ieri"}
+  {id:"demo5",name:"Sofia Romano",avatar:"SR",color:"#9c637f",online:false,favorite:false,unread:0,messages:[
+    {text:"Ci vediamo alle 18?",mine:false,time:"11:03"}
+  ]},
+  {id:"demo6",name:"Marco Conti",avatar:"MC",color:"#a17955",online:false,favorite:false,unread:0,messages:[
+    {text:"Ti mando tutto più tardi.",mine:false,time:"09:21"}
+  ]},
+  {id:"demo7",name:"Team Nexora",avatar:"NX",color:"#6b60ad",online:false,favorite:false,unread:0,messages:[
+    {text:"Nuovo aggiornamento disponibile.",mine:false,time:"Ieri"}
   ]}
 ];
 let chats=[];
@@ -439,8 +450,7 @@ let chats=[];
 function setStatus(message){$("status").textContent=message}
 function setBusy(value){
   isBusy=value;
-  ["requestCodeButton","verifyButton","resendCodeButton","backButton","loginButton"]
-    .forEach(id=>$(id).disabled=value);
+  ["requestCodeButton","verifyButton","resendCodeButton","backButton","loginButton"].forEach(id=>$(id).disabled=value);
 }
 function showAuth(){
   currentUser=null;
@@ -453,24 +463,19 @@ function showApp(user){
   currentUser=user;
   $("authSection").classList.add("hidden");
   $("appSection").classList.remove("hidden");
-  const name=user.user_metadata?.username||user.email?.split("@")[0]||"Nexora";
-  $("topAvatar").textContent=name.charAt(0).toUpperCase();
-  $("railAvatar").textContent=name.charAt(0).toUpperCase();
-  $("settingsUsername").textContent="@"+name;
+  const username=user.user_metadata?.username||user.email?.split("@")[0]||"Nexora";
+  $("topAvatar").textContent=username.slice(0,2).toUpperCase();
+  $("railAvatar").textContent=username.slice(0,2).toUpperCase();
+  $("settingsUsername").textContent="@"+username;
   $("settingsEmail").textContent=user.email||"";
-  renderOnline();
-  renderChats();
+  renderOnline();renderChats();
   if(!activeChatId&&chats.length)selectChat(chats[0].id,false);
   checkExistingSubscription();
 }
 async function callFunction(url,body){
   const response=await fetch(url,{
     method:"POST",
-    headers:{
-      "Content-Type":"application/json",
-      "apikey":SUPABASE_PUBLISHABLE_KEY,
-      "Authorization":"Bearer "+SUPABASE_PUBLISHABLE_KEY
-    },
+    headers:{"Content-Type":"application/json","apikey":SUPABASE_PUBLISHABLE_KEY,"Authorization":"Bearer "+SUPABASE_PUBLISHABLE_KEY},
     body:JSON.stringify(body)
   });
   const result=await response.json().catch(()=>({}));
@@ -478,19 +483,12 @@ async function callFunction(url,body){
   return result;
 }
 function getSignupFields(){
-  return {
-    username:$("username").value.trim(),
-    email:$("email").value.trim().toLowerCase(),
-    password:$("password").value
-  };
+  return {username:$("username").value.trim(),email:$("email").value.trim().toLowerCase(),password:$("password").value};
 }
 function validateSignup(fields){
-  if(fields.username.length<3||fields.username.length>24)
-    throw new Error("Lo username deve contenere da 3 a 24 caratteri.");
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email))
-    throw new Error("Inserisci un indirizzo email valido.");
-  if(fields.password.length<8)
-    throw new Error("La password deve contenere almeno 8 caratteri.");
+  if(fields.username.length<3||fields.username.length>24)throw new Error("Lo username deve contenere da 3 a 24 caratteri.");
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email))throw new Error("Inserisci un indirizzo email valido.");
+  if(fields.password.length<8)throw new Error("La password deve contenere almeno 8 caratteri.");
 }
 async function requestEmailCode(){
   if(isBusy)return;
@@ -498,8 +496,7 @@ async function requestEmailCode(){
   try{
     validateSignup(fields);setBusy(true);setStatus("Invio del codice email...");
     await callFunction(REQUEST_CODE_URL,{email:fields.email,username:fields.username});
-    pendingSignup=fields;
-    $("verificationCode").value="";
+    pendingSignup=fields;$("verificationCode").value="";
     $("registrationFields").classList.add("hidden");
     $("verificationSection").classList.remove("hidden");
     $("loginEmail").value=fields.email;
@@ -514,10 +511,7 @@ async function verifyEmailCode(){
   if(!/^\d{6}$/.test(code)){setStatus("Inserisci il codice di 6 cifre.");return}
   try{
     setBusy(true);setStatus("Verifica del codice in corso...");
-    await callFunction(VERIFY_CODE_URL,{
-      email:pendingSignup.email,username:pendingSignup.username,
-      password:pendingSignup.password,code
-    });
+    await callFunction(VERIFY_CODE_URL,{email:pendingSignup.email,username:pendingSignup.username,password:pendingSignup.password,code});
     const account=pendingSignup;
     const result=await client.auth.signInWithPassword({email:account.email,password:account.password});
     if(result.error){
@@ -538,8 +532,7 @@ async function resendEmailCode(){
   try{
     setBusy(true);setStatus("Richiesta nuovo codice...");
     await callFunction(REQUEST_CODE_URL,{email:pendingSignup.email,username:pendingSignup.username});
-    $("verificationCode").value="";
-    setStatus("Nuovo codice richiesto. Controlla la posta.");
+    $("verificationCode").value="";setStatus("Nuovo codice richiesto. Controlla la posta.");
   }catch(error){setStatus("Errore: "+error.message)}
   finally{setBusy(false)}
 }
@@ -553,8 +546,7 @@ function goBackToRegistration(){
 }
 async function loginAccount(){
   if(isBusy)return;
-  const identifier=$("loginEmail").value.trim();
-  const password=$("loginPassword").value;
+  const identifier=$("loginEmail").value.trim(),password=$("loginPassword").value;
   if(!identifier||!password){setStatus("Inserisci email o username e password.");return}
   try{
     setBusy(true);setStatus("Accesso in corso...");
@@ -580,14 +572,14 @@ async function logoutAccount(){
 }
 function loadChats(){
   try{
-    const saved=localStorage.getItem("nexora_demo_chats_v2");
-    chats=saved?JSON.parse(saved):JSON.parse(JSON.stringify(initialChats));
+    const saved=localStorage.getItem("nexora_demo_chats_v3");
+    chats=saved?JSON.parse(saved):JSON.parse(JSON.stringify(sampleChats));
     if(!Array.isArray(chats))throw new Error("Dati non validi");
-  }catch{chats=JSON.parse(JSON.stringify(initialChats))}
+  }catch{chats=JSON.parse(JSON.stringify(sampleChats))}
 }
 function saveChats(){
-  try{localStorage.setItem("nexora_demo_chats_v2",JSON.stringify(chats))}
-  catch(error){console.warn("Impossibile salvare la demo",error)}
+  try{localStorage.setItem("nexora_demo_chats_v3",JSON.stringify(chats))}
+  catch(error){console.warn("Salvataggio locale non riuscito",error)}
 }
 function safe(value){
   return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -609,8 +601,8 @@ function renderChats(){
   const visible=chats.filter(chat=>{
     const last=lastMessage(chat);
     const matches=(chat.name+" "+(last?.text||"")).toLowerCase().includes(query);
-    const filter=activeFilter==="all"||(activeFilter==="unread"&&chat.unread>0)||(activeFilter==="favorites"&&chat.favorite);
-    return matches&&filter;
+    const matchesFilter=activeFilter==="all"||(activeFilter==="unread"&&chat.unread>0)||(activeFilter==="favorites"&&chat.favorite);
+    return matches&&matchesFilter;
   });
   $("chatCount").textContent=String(chats.length);
   if(!visible.length){
@@ -618,21 +610,14 @@ function renderChats(){
     return;
   }
   visible.forEach(chat=>{
-    const last=lastMessage(chat);
-    const row=document.createElement("div");
+    const last=lastMessage(chat),row=document.createElement("div");
     row.className="conversation"+(chat.id===activeChatId?" active":"");
     row.tabIndex=0;row.setAttribute("role","button");
     row.innerHTML=`
       <div class="avatar ${chat.online?"online":""}" style="background:${safe(chat.color)}">${safe(chat.avatar)}</div>
       <div class="conversation-copy">
-        <div class="conversation-top">
-          <span class="conversation-name">${safe(chat.name)}${chat.favorite?" ★":""}</span>
-          <span class="conversation-time">${safe(last?.time||"")}</span>
-        </div>
-        <div class="conversation-top">
-          <span class="conversation-preview">${last?.mine?"Tu: ":""}${safe(last?.text||"Nessun messaggio")}</span>
-          ${chat.unread?`<span class="unread">${chat.unread}</span>`:""}
-        </div>
+        <div class="conversation-top"><span class="conversation-name">${safe(chat.name)}${chat.favorite?" ★":""}</span><span class="conversation-time">${safe(last?.time||"")}</span></div>
+        <div class="conversation-top"><span class="conversation-preview">${last?.mine?"Tu: ":""}${safe(last?.text||"Nessun messaggio")}</span>${chat.unread?`<span class="unread">${chat.unread}</span>`:""}</div>
       </div>`;
     row.addEventListener("click",()=>selectChat(chat.id,true));
     row.addEventListener("keydown",event=>{
@@ -643,23 +628,20 @@ function renderChats(){
 }
 function selectChat(id,openMobile=true){
   activeChatId=id;
-  const chat=chats.find(item=>item.id===id);
-  if(!chat)return;
+  const chat=chats.find(item=>item.id===id);if(!chat)return;
   chat.unread=0;
   $("chatName").textContent=chat.name;
-  $("chatSubtitle").textContent=chat.online?"Online":"Ultimo accesso recente";
+  $("chatSubtitle").textContent=chat.online?"Online ora":"Ultimo accesso recente";
   $("chatAvatar").textContent=chat.avatar;
   $("chatAvatar").style.background=chat.color;
   $("detailsAvatar").textContent=chat.avatar;
   $("detailsAvatar").style.background=chat.color;
   $("detailsName").textContent=chat.name;
   renderChats();renderMessages();
-  if(openMobile&&matchMedia("(max-width:760px)").matches)
-    $("appSection").classList.add("chat-open");
+  if(openMobile&&matchMedia("(max-width:760px)").matches)$("appSection").classList.add("chat-open");
 }
 function renderMessages(){
-  const area=$("messages");
-  const chat=chats.find(item=>item.id===activeChatId);
+  const area=$("messages"),chat=chats.find(item=>item.id===activeChatId);
   if(!chat){
     area.innerHTML='<div class="empty-state"><div class="symbol">✳</div><h2>Benvenuto su Nexora</h2><p>Seleziona una conversazione per iniziare.</p></div>';
     return;
@@ -667,18 +649,16 @@ function renderMessages(){
   area.replaceChildren();
   const day=document.createElement("div");day.className="day-label";day.textContent="Oggi";area.appendChild(day);
   chat.messages.forEach(message=>{
-    const row=document.createElement("div");
-    row.className="message-row"+(message.mine?" mine":"");
+    const row=document.createElement("div");row.className="message-row"+(message.mine?" mine":"");
     const bubble=document.createElement("div");bubble.className="message-bubble";bubble.textContent=message.text;
-    const meta=document.createElement("div");meta.className="message-meta";
-    meta.textContent=message.time+(message.mine?"  ✓✓":"");
+    const meta=document.createElement("div");meta.className="message-meta";meta.textContent=message.time+(message.mine?"  ✓✓":"");
     row.append(bubble,meta);area.appendChild(row);
   });
   area.scrollTop=area.scrollHeight;
 }
 function sendMessage(event){
   event.preventDefault();
-  const input=$("messageInput");const text=input.value.trim();
+  const input=$("messageInput"),text=input.value.trim();
   if(!text||!activeChatId)return;
   const chat=chats.find(item=>item.id===activeChatId);if(!chat)return;
   const time=new Date().toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
@@ -688,9 +668,8 @@ function sendMessage(event){
 function createChat(){
   const name=prompt("Nome della nuova conversazione:");
   if(!name||!name.trim())return;
-  const clean=name.trim().slice(0,40);
-  const id="local_"+Date.now();
-  chats.unshift({id,name:clean,avatar:clean.charAt(0).toUpperCase(),color:"#247c71",favorite:false,unread:0,online:false,messages:[]});
+  const clean=name.trim().slice(0,40),id="local_"+Date.now();
+  chats.unshift({id,name:clean,avatar:clean.charAt(0).toUpperCase(),color:"#287b73",online:false,favorite:false,unread:0,messages:[]});
   saveChats();renderOnline();renderChats();selectChat(id,true);
 }
 function toggleFavorite(){
@@ -703,8 +682,7 @@ function urlBase64ToUint8Array(value){
   return Uint8Array.from(atob((value+padding).replace(/-/g,"+").replace(/_/g,"/")),c=>c.charCodeAt(0));
 }
 async function getRegistration(){
-  if(!("serviceWorker"in navigator)||!("PushManager"in window))
-    throw new Error("Questo browser non supporta le notifiche push.");
+  if(!("serviceWorker"in navigator)||!("PushManager"in window))throw new Error("Questo browser non supporta le notifiche push.");
   if(!window.isSecureContext)throw new Error("Apri Nexora tramite HTTPS.");
   await navigator.serviceWorker.register("/service-worker.js");
   return await navigator.serviceWorker.ready;
@@ -727,16 +705,12 @@ async function enableNotifications(){
     const registration=await getRegistration();
     let subscription=await registration.pushManager.getSubscription();
     if(subscription){
-      const oldKey=subscription.options.applicationServerKey;
-      const newKey=urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
+      const oldKey=subscription.options.applicationServerKey,newKey=urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
       const same=oldKey&&oldKey.byteLength===newKey.byteLength&&newKey.every((b,i)=>b===oldKey[i]);
       if(!same){await subscription.unsubscribe();subscription=null}
     }
-    if(!subscription)subscription=await registration.pushManager.subscribe({
-      userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
-    });
-    notificationSubscription=subscription;
-    $("testNotification").disabled=false;
+    if(!subscription)subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)});
+    notificationSubscription=subscription;$("testNotification").disabled=false;
     alert("Notifiche attivate su questo dispositivo.");
   }catch(error){alert("Errore notifiche: "+error.message)}
   finally{$("enableNotifications").disabled=false}
@@ -745,8 +719,7 @@ async function sendTestNotification(){
   $("testNotification").disabled=true;
   try{
     if(!currentUser)throw new Error("Accedi prima al tuo account.");
-    const registration=await getRegistration();
-    const subscription=await registration.pushManager.getSubscription();
+    const registration=await getRegistration(),subscription=await registration.pushManager.getSubscription();
     if(!subscription||Notification.permission!=="granted")throw new Error("Attiva prima le notifiche.");
     const response=await fetch(FUNCTION_URL,{
       method:"POST",
@@ -759,23 +732,16 @@ async function sendTestNotification(){
   }catch(error){alert("Errore: "+error.message)}
   finally{$("testNotification").disabled=false}
 }
-function cycleTheme(){
-  themeMode=themeMode==="auto"?"light":themeMode==="light"?"dark":"auto";
-  document.documentElement.style.colorScheme=themeMode==="auto"?"dark":themeMode;
-  if(themeMode==="auto"){
+function toggleTheme(){
+  if(themeMode==="dark"){
+    themeMode="light";
+    const values={"--bg":"#eef0f5","--rail":"#e5e7ed","--panel":"#ffffff","--panel2":"#f1f2f7","--panel3":"#e6e8ef","--border":"#dfe1e9","--text":"#20212b","--muted":"#777b8a","--other":"#e5e7ee"};
+    Object.entries(values).forEach(([key,value])=>document.documentElement.style.setProperty(key,value));
+    document.documentElement.style.colorScheme="light";
+  }else{
+    themeMode="dark";
     document.documentElement.style.cssText="";
     document.documentElement.style.colorScheme="dark";
-  }else if(themeMode==="light"){
-    document.documentElement.style.setProperty("--bg","#f0f1f6");
-    document.documentElement.style.setProperty("--panel","#ffffff");
-    document.documentElement.style.setProperty("--panel2","#f0f1f7");
-    document.documentElement.style.setProperty("--border","#dedee8");
-    document.documentElement.style.setProperty("--text","#242431");
-    document.documentElement.style.setProperty("--muted","#77788c");
-    document.documentElement.style.setProperty("--other","#eeeef4");
-    document.documentElement.style.setProperty("--me","#20cbb9");
-  }else{
-    location.reload();
   }
 }
 $("requestCodeButton").addEventListener("click",requestEmailCode);
@@ -799,18 +765,18 @@ $("settingsPanel").addEventListener("click",event=>{if(event.target===$("setting
 $("enableNotifications").addEventListener("click",enableNotifications);
 $("testNotification").addEventListener("click",sendTestNotification);
 $("chatInfoButton").addEventListener("click",toggleFavorite);
-$("closeDetails").addEventListener("click",()=>$("details").classList.toggle("hidden"));
-$("themeButton").addEventListener("click",cycleTheme);
+$("closeDetails").addEventListener("click",()=>$("details").classList.add("hidden"));
+$("themeButton").addEventListener("click",toggleTheme);
 $("messageInput").addEventListener("input",event=>{
   event.target.style.height="auto";
-  event.target.style.height=Math.min(event.target.scrollHeight,130)+"px";
+  event.target.style.height=Math.min(event.target.scrollHeight,125)+"px";
 });
 $("messageInput").addEventListener("keydown",event=>{
   if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();$("composer").requestSubmit()}
 });
-$("callButton").addEventListener("click",()=>alert("Le chiamate saranno aggiunte in una fase successiva."));
-$("videoButton").addEventListener("click",()=>alert("Le videochiamate saranno aggiunte in una fase successiva."));
-$("attachButton").addEventListener("click",()=>alert("L'invio di allegati sarà aggiunto in una fase successiva."));
+$("callButton").addEventListener("click",()=>alert("Le chiamate saranno implementate in una fase successiva."));
+$("videoButton").addEventListener("click",()=>alert("Le videochiamate saranno implementate in una fase successiva."));
+$("attachButton").addEventListener("click",()=>alert("Gli allegati saranno implementati in una fase successiva."));
 ["railHome","railContacts","railCalls","mobileHome","mobileContacts"].forEach(id=>{
   $(id).addEventListener("click",()=>alert("Questa sezione sarà sviluppata in un prossimo aggiornamento."));
 });
