@@ -5,205 +5,261 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#075e54">
-  <title>Nexora Chat — Test notifiche</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Nexora Chat">
+  <title>Nexora Chat — Notifiche</title>
+
   <style>
     * { box-sizing: border-box; }
+
     body {
-      margin: 0; min-height: 100vh; display: grid; place-items: center;
-      padding: 20px; background: #101b20; color: #f5f7f8;
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: #101b20;
+      color: #f5f7f8;
       font-family: Arial, sans-serif;
     }
+
     main {
-      width: 100%; max-width: 420px; padding: 28px 24px;
-      border-radius: 24px; background: #202e34; text-align: center;
+      width: 100%;
+      max-width: 420px;
+      padding: 28px 24px;
+      border: 1px solid #34474d;
+      border-radius: 24px;
+      background: #202e34;
+      text-align: center;
+      box-shadow: 0 20px 60px #0004;
     }
+
     .logo {
-      margin: auto; width: 60px; height: 60px; display: grid;
-      place-items: center; border-radius: 18px; background: #078577;
-      font-size: 28px; font-weight: bold;
+      width: 60px;
+      height: 60px;
+      margin: auto;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: #078577;
+      font-size: 28px;
+      font-weight: bold;
     }
+
     h1 { font-size: 24px; }
-    p { color: #c9dce2; line-height: 1.5; }
-    button {
-      width: 100%; padding: 15px; margin-top: 10px; border: 0;
-      border-radius: 12px; background: #078577; color: white;
-      font-weight: bold; font-size: 15px; cursor: pointer;
+
+    p {
+      color: #c9dce2;
+      line-height: 1.5;
     }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 12px;
+      border: 0;
+      border-radius: 12px;
+      background: #078577;
+      color: white;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      transition: opacity .2s, transform .2s;
+    }
+
+    button:active { transform: scale(.98); }
+
     button.secondary { background: #344c48; }
-    button:disabled { opacity: .5; cursor: not-allowed; }
-    #status { overflow-wrap: anywhere; font-size: 13px; margin-top: 18px; }
+
+    button:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    #status {
+      overflow-wrap: anywhere;
+      font-size: 13px;
+      margin-top: 18px;
+    }
+
+    .note {
+      font-size: 12px;
+      color: #9db1b8;
+    }
   </style>
 </head>
+
 <body>
-<main>
-  <div class="logo">N</div>
-  <h1>Nexora Chat</h1>
-  <p>Gestione e test delle notifiche push.</p>
+  <main>
+    <div class="logo">N</div>
+    <h1>Nexora Chat</h1>
+    <p>Attiva le notifiche per ricevere gli avvisi anche quando non hai l'app aperta.</p>
 
-  <button id="enable">1. Attiva notifiche</button>
-  <button id="reset" class="secondary">2. Reimposta sottoscrizione</button>
-  <button id="test" class="secondary" disabled>3. Ricevi notifica di test</button>
-  <p id="status" role="status">In attesa.</p>
-</main>
+    <button id="enable">Attiva notifiche</button>
+    <button id="test" class="secondary" disabled>
+      Ricevi notifica di test
+    </button>
 
-<script>
-"use strict";
+    <p id="status" role="status" aria-live="polite">
+      Attiva le notifiche per iniziare.
+    </p>
 
-const VAPID_PUBLIC_KEY =
-  "BEerw_zOGMn7TBC13Ike0xTlXx09tCoLdeE8omauraJ362wgWvy3rhH_GQ6qJ6a1wO9sbqvV3X0W0OF_Hp8d8Uw";
+    <p class="note">
+      Il test invia una notifica dopo 5 secondi.
+    </p>
+  </main>
 
-const FUNCTION_URL =
-  "https://dycbbhqzpgnnyilzwuwa.supabase.co/functions/v1/schedule-test-notification";
+  <script>
+    "use strict";
 
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_zYdD5LSAKMFRNk-Yas3Hxg_oogRDb3a";
+    const VAPID_PUBLIC_KEY =
+      "BEerw_zOGMn7TBC13Ike0xTlXx09tCoLdeE8omauraJ362wgWvy3rhH_GQ6qJ6a1wO9sbqvV3X0W0OF_Hp8d8Uw";
 
-const statusElement = document.getElementById("status");
-const enableButton = document.getElementById("enable");
-const resetButton = document.getElementById("reset");
-const testButton = document.getElementById("test");
+    const FUNCTION_URL =
+      "https://dycbbhqzpgnnyilzwuwa.supabase.co/functions/v1/schedule-test-notification";
 
-let subscription = null;
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_zYdD5LSAKMFRNk-Yas3Hxg_oogRDb3a";
 
-function setStatus(message) {
-  statusElement.textContent = message;
-}
+    const enableButton = document.getElementById("enable");
+    const testButton = document.getElementById("test");
+    const statusElement = document.getElementById("status");
 
-function urlBase64ToUint8Array(base64String) {
-  const padding = "=".repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/-/g, "+")
-    .replace(/_/g, "/");
-
-  const raw = atob(base64);
-  return Uint8Array.from(raw, character => character.charCodeAt(0));
-}
-
-async function getRegistration() {
-  if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-    throw new Error("Questo browser non supporta le notifiche push.");
-  }
-
-  if (!window.isSecureContext) {
-    throw new Error("Apri il sito tramite HTTPS.");
-  }
-
-  await navigator.serviceWorker.register("/service-worker.js");
-  return await navigator.serviceWorker.ready;
-}
-
-async function enableNotifications() {
-  try {
-    enableButton.disabled = true;
-    setStatus("Attivazione notifiche...");
-
-    const permission = await Notification.requestPermission();
-
-    if (permission !== "granted") {
-      throw new Error("Permesso notifiche non concesso.");
+    function setStatus(message) {
+      statusElement.textContent = message;
     }
 
-    const registration = await getRegistration();
+    function urlBase64ToUint8Array(value) {
+      const padding = "=".repeat((4 - value.length % 4) % 4);
+      const base64 = (value + padding)
+        .replace(/-/g, "+")
+        .replace(/_/g, "/");
 
-    subscription = await registration.pushManager.getSubscription();
+      const raw = atob(base64);
 
-    if (!subscription) {
-      subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
-      });
-    }
-
-    testButton.disabled = false;
-    setStatus("Notifiche attive. Ora puoi eseguire il test.");
-  } catch (error) {
-    setStatus("Errore: " + error.message);
-  } finally {
-    enableButton.disabled = false;
-  }
-}
-
-async function resetSubscription() {
-  try {
-    resetButton.disabled = true;
-    testButton.disabled = true;
-    setStatus("Eliminazione della vecchia sottoscrizione...");
-
-    const registration = await getRegistration();
-    const oldSubscription = await registration.pushManager.getSubscription();
-
-    if (oldSubscription) {
-      await oldSubscription.unsubscribe();
-    }
-
-    subscription = null;
-
-    if (Notification.permission !== "granted") {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") {
-        throw new Error("Permesso notifiche non concesso.");
-      }
-    }
-
-    subscription = await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
-    });
-
-    testButton.disabled = false;
-    setStatus("Nuova sottoscrizione creata. Premi il pulsante di test.");
-  } catch (error) {
-    setStatus("Errore: " + error.message);
-  } finally {
-    resetButton.disabled = false;
-  }
-}
-
-async function sendTestNotification() {
-  try {
-    testButton.disabled = true;
-    setStatus("Invio della notifica...");
-
-    const registration = await getRegistration();
-
-    subscription = await registration.pushManager.getSubscription();
-
-    if (!subscription) {
-      throw new Error("Nessuna sottoscrizione. Premi prima Attiva notifiche.");
-    }
-
-    const response = await fetch(FUNCTION_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": SUPABASE_PUBLISHABLE_KEY,
-        "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
-      },
-      body: JSON.stringify({
-        subscription: subscription.toJSON()
-      })
-    });
-
-    const result = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      throw new Error(
-        "HTTP " + response.status + ": " +
-        (result.error || result.details || "Errore del server")
+      return Uint8Array.from(raw, character =>
+        character.charCodeAt(0)
       );
     }
 
-    setStatus("Richiesta inviata. " + (result.message || ""));
-  } catch (error) {
-    setStatus("Errore: " + error.message);
-  } finally {
-    testButton.disabled = false;
-  }
-}
+    async function getRegistration() {
+      if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+        throw new Error("Questo browser non supporta le notifiche push.");
+      }
 
-enableButton.addEventListener("click", enableNotifications);
-resetButton.addEventListener("click", resetSubscription);
-testButton.addEventListener("click", sendTestNotification);
-</script>
+      if (!window.isSecureContext) {
+        throw new Error("Apri Nexora Chat tramite HTTPS.");
+      }
+
+      await navigator.serviceWorker.register("/service-worker.js");
+
+      return await navigator.serviceWorker.ready;
+    }
+
+    async function enableNotifications() {
+      enableButton.disabled = true;
+      testButton.disabled = true;
+
+      try {
+        if (!("Notification" in window)) {
+          throw new Error("Le notifiche non sono supportate.");
+        }
+
+        if (Notification.permission === "denied") {
+          throw new Error(
+            "Notifiche bloccate nelle impostazioni del dispositivo."
+          );
+        }
+
+        const permission = await Notification.requestPermission();
+
+        if (permission !== "granted") {
+          throw new Error("Permesso notifiche non concesso.");
+        }
+
+        const registration = await getRegistration();
+
+        let subscription =
+          await registration.pushManager.getSubscription();
+
+        if (subscription) {
+          const existingKey = subscription.options.applicationServerKey;
+          const expectedKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
+
+          const sameKey = existingKey &&
+            existingKey.byteLength === expectedKey.byteLength &&
+            expectedKey.every((byte, index) => byte === existingKey[index]);
+
+          if (!sameKey) {
+            await subscription.unsubscribe();
+            subscription = null;
+          }
+        }
+
+        if (!subscription) {
+          subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+          });
+        }
+
+        testButton.disabled = false;
+        setStatus("Notifiche attive. Ora puoi ricevere il test.");
+      } catch (error) {
+        setStatus("Errore: " + error.message);
+      } finally {
+        enableButton.disabled = false;
+      }
+    }
+
+    async function sendTestNotification() {
+      testButton.disabled = true;
+
+      try {
+        setStatus("Richiesta inviata. Attendi la notifica...");
+
+        const registration = await getRegistration();
+        const subscription =
+          await registration.pushManager.getSubscription();
+
+        if (Notification.permission !== "granted" || !subscription) {
+          testButton.disabled = true;
+          throw new Error("Premi prima Attiva notifiche.");
+        }
+
+        const response = await fetch(FUNCTION_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_PUBLISHABLE_KEY,
+            "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
+          },
+          body: JSON.stringify({
+            subscription: subscription.toJSON()
+          })
+        });
+
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(
+            "HTTP " + response.status + ": " +
+            (result.error || result.details || "Errore del server")
+          );
+        }
+
+        setStatus(
+          "Test inviato. La notifica dovrebbe arrivare tra circa 5 secondi."
+        );
+      } catch (error) {
+        setStatus("Errore: " + error.message);
+        testButton.disabled = false;
+      }
+    }
+
+    enableButton.addEventListener("click", enableNotifications);
+    testButton.addEventListener("click", sendTestNotification);
+  </script>
 </body>
 </html>
