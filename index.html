@@ -130,6 +130,13 @@
       font-size: 12px;
       line-height: 1.5;
     }
+
+    .code-input {
+      text-align: center;
+      letter-spacing: 8px;
+      font-size: 24px;
+      font-weight: bold;
+    }
   </style>
 </head>
 
@@ -140,26 +147,50 @@
   <p class="subtitle">Accedi o crea il tuo account.</p>
 
   <section id="authSection">
-    <label for="username">Username</label>
-    <input id="username" type="text" autocomplete="username"
-      maxlength="24" placeholder="Il tuo username">
+    <div id="registrationFields">
+      <label for="username">Username</label>
+      <input id="username" type="text" autocomplete="username"
+        maxlength="24" placeholder="Il tuo username">
 
-    <label for="email">Email</label>
-    <input id="email" type="email" autocomplete="email"
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="email"
+        placeholder="nome@esempio.it">
+
+      <label for="password">Password</label>
+      <input id="password" type="password"
+        autocomplete="new-password" minlength="8"
+        placeholder="Almeno 8 caratteri">
+
+      <button id="requestCodeButton">Invia codice di verifica</button>
+    </div>
+
+    <section id="verificationSection" class="hidden">
+      <p class="small">
+        Abbiamo richiesto un codice di verifica per il tuo indirizzo email.
+        Inserisci il codice ricevuto. Scade dopo 10 minuti.
+      </p>
+
+      <label for="verificationCode">Codice email</label>
+      <input id="verificationCode" class="code-input"
+        type="text" inputmode="numeric" autocomplete="one-time-code"
+        maxlength="6" placeholder="000000">
+
+      <button id="verifyButton">Verifica e crea account</button>
+      <button id="resendCodeButton" class="secondary">Invia un nuovo codice</button>
+      <button id="backButton" class="secondary">Indietro</button>
+    </section>
+
+    <div class="separator"></div>
+
+    <label for="loginEmail">Email per accedere</label>
+    <input id="loginEmail" type="email" autocomplete="email"
       placeholder="nome@esempio.it">
 
-    <label for="password">Password</label>
-    <input id="password" type="password"
-      autocomplete="current-password" minlength="8"
-      placeholder="Almeno 8 caratteri">
+    <label for="loginPassword">Password</label>
+    <input id="loginPassword" type="password"
+      autocomplete="current-password" placeholder="La tua password">
 
-    <button id="registerButton">Crea account</button>
     <button id="loginButton" class="secondary">Accedi</button>
-
-    <p class="small">
-      La registrazione usa Supabase Auth. La verifica tramite codice email
-      non è ancora configurata.
-    </p>
   </section>
 
   <section id="appSection" class="hidden">
@@ -191,17 +222,21 @@
 <script>
 "use strict";
 
-// Configurazione Supabase
 const SUPABASE_URL = "https://dycbbhqzpgnnyilzwuwa.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_zYdD5LSAKMFRNk-Yas3Hxg_oogRDb3a";
 
-// Configurazione notifiche push
 const VAPID_PUBLIC_KEY =
   "BEerw_zOGMn7TBC13Ike0xTlXx09tCoLdeE8omauraJ362wgWvy3rhH_GQ6qJ6a1wO9sbqvV3X0W0OF_Hp8d8Uw";
 
 const FUNCTION_URL =
-  "https://dycbbhqzpgnnyilzwuwa.supabase.co/functions/v1/schedule-test-notification";
+  SUPABASE_URL + "/functions/v1/schedule-test-notification";
+
+const REQUEST_CODE_URL =
+  SUPABASE_URL + "/functions/v1/request-email-code";
+
+const VERIFY_CODE_URL =
+  SUPABASE_URL + "/functions/v1/verify-email-code";
 
 const { createClient } = supabase;
 
@@ -222,20 +257,32 @@ const $ = id => document.getElementById(id);
 const authSection = $("authSection");
 const appSection = $("appSection");
 const statusElement = $("status");
-const registerButton = $("registerButton");
+const registrationFields = $("registrationFields");
+const verificationSection = $("verificationSection");
+
+const requestCodeButton = $("requestCodeButton");
+const verifyButton = $("verifyButton");
+const resendCodeButton = $("resendCodeButton");
+const backButton = $("backButton");
 const loginButton = $("loginButton");
 const logoutButton = $("logoutButton");
 const enableButton = $("enableNotifications");
 const testButton = $("testNotification");
 
 let currentUser = null;
+let pendingSignup = null;
+let isBusy = false;
 
 function setStatus(message) {
   statusElement.textContent = message;
 }
 
 function setBusy(busy) {
-  registerButton.disabled = busy;
+  isBusy = busy;
+  requestCodeButton.disabled = busy;
+  verifyButton.disabled = busy;
+  resendCodeButton.disabled = busy;
+  backButton.disabled = busy;
   loginButton.disabled = busy;
 }
 
@@ -246,7 +293,10 @@ function urlBase64ToUint8Array(value) {
     .replace(/_/g, "/");
 
   const raw = atob(base64);
-  return Uint8Array.from(raw, character => character.charCodeAt(0));
+  return Uint8Array.from(
+    raw,
+    character => character.charCodeAt(0)
+  );
 }
 
 function showAuth() {
@@ -269,93 +319,192 @@ function showApp(user) {
 
   $("accountEmail").textContent = user.email || "";
   setStatus("Accesso effettuato.");
+
   checkExistingSubscription();
 }
 
-async function checkExistingSubscription() {
-  try {
-    if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-      return;
-    }
+async function callFunction(url, body) {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": SUPABASE_PUBLISHABLE_KEY,
+      "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
+    },
+    body: JSON.stringify(body)
+  });
 
-    const registration = await navigator.serviceWorker.register(
-      "/service-worker.js"
+  const result = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(
+      result.error || "Errore del server (HTTP " + response.status + ")."
     );
+  }
 
-    const readyRegistration = await navigator.serviceWorker.ready;
-    const subscription =
-      await readyRegistration.pushManager.getSubscription();
+  return result;
+}
 
-    testButton.disabled = !subscription ||
-      Notification.permission !== "granted";
-  } catch {
-    testButton.disabled = true;
+function getSignupFields() {
+  return {
+    username: $("username").value.trim(),
+    email: $("email").value.trim().toLowerCase(),
+    password: $("password").value
+  };
+}
+
+function validateSignup(fields) {
+  if (fields.username.length < 3 || fields.username.length > 24) {
+    throw new Error("Lo username deve contenere da 3 a 24 caratteri.");
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) {
+    throw new Error("Inserisci un indirizzo email valido.");
+  }
+
+  if (fields.password.length < 8) {
+    throw new Error("La password deve contenere almeno 8 caratteri.");
   }
 }
 
-async function registerAccount() {
-  const username = $("username").value.trim();
-  const email = $("email").value.trim();
-  const password = $("password").value;
+async function requestEmailCode() {
+  if (isBusy) return;
 
-  if (username.length < 3) {
-    setStatus("Lo username deve contenere almeno 3 caratteri.");
-    return;
-  }
-
-  if (!email || !email.includes("@")) {
-    setStatus("Inserisci un indirizzo email valido.");
-    return;
-  }
-
-  if (password.length < 8) {
-    setStatus("La password deve contenere almeno 8 caratteri.");
-    return;
-  }
-
-  setBusy(true);
-  setStatus("Creazione dell'account...");
+  const fields = getSignupFields();
 
   try {
-    const { data, error } = await client.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { username }
-      }
+    validateSignup(fields);
+    setBusy(true);
+    setStatus("Invio del codice email...");
+
+    await callFunction(REQUEST_CODE_URL, {
+      email: fields.email,
+      username: fields.username
     });
 
-    if (error) throw error;
+    pendingSignup = fields;
+    $("verificationCode").value = "";
+    registrationFields.classList.add("hidden");
+    verificationSection.classList.remove("hidden");
 
-    if (data.session && data.user) {
-      showApp(data.user);
-      setStatus("Account creato e accesso effettuato.");
-    } else {
-      setStatus(
-        "Account creato, ma Supabase non ha avviato una sessione. " +
-        "Controlla la configurazione di conferma email e riprova ad accedere."
-      );
-    }
+    $("loginEmail").value = fields.email;
+
+    setStatus("Codice richiesto. Controlla la posta e lo spam.");
   } catch (error) {
-    setStatus("Registrazione non riuscita: " + error.message);
+    setStatus("Errore: " + error.message);
   } finally {
     setBusy(false);
   }
 }
 
+async function verifyEmailCode() {
+  if (isBusy) return;
+
+  if (!pendingSignup) {
+    setStatus("Richiedi prima un codice di verifica.");
+    return;
+  }
+
+  const code = $("verificationCode").value.trim();
+
+  if (!/^\d{6}$/.test(code)) {
+    setStatus("Inserisci il codice di 6 cifre.");
+    return;
+  }
+
+  try {
+    setBusy(true);
+    setStatus("Verifica del codice e creazione dell'account...");
+
+    await callFunction(VERIFY_CODE_URL, {
+      email: pendingSignup.email,
+      username: pendingSignup.username,
+      password: pendingSignup.password,
+      code
+    });
+
+    $("loginEmail").value = pendingSignup.email;
+    $("loginPassword").value = pendingSignup.password;
+
+    const loginResult = await client.auth.signInWithPassword({
+      email: pendingSignup.email,
+      password: pendingSignup.password
+    });
+
+    if (loginResult.error) {
+      pendingSignup = null;
+      registrationFields.classList.remove("hidden");
+      verificationSection.classList.add("hidden");
+      setStatus(
+        "Account creato e email verificata. Accedi con email e password."
+      );
+      return;
+    }
+
+    pendingSignup = null;
+    $("password").value = "";
+    $("loginPassword").value = "";
+
+    showApp(loginResult.data.user);
+    setStatus("Email verificata. Account creato correttamente.");
+  } catch (error) {
+    setStatus("Verifica non riuscita: " + error.message);
+  } finally {
+    setBusy(false);
+  }
+}
+
+async function resendEmailCode() {
+  if (isBusy) return;
+
+  if (!pendingSignup) {
+    setStatus("Inserisci nuovamente i dati di registrazione.");
+    return;
+  }
+
+  try {
+    setBusy(true);
+    setStatus("Richiesta di un nuovo codice...");
+
+    await callFunction(REQUEST_CODE_URL, {
+      email: pendingSignup.email,
+      username: pendingSignup.username
+    });
+
+    $("verificationCode").value = "";
+    setStatus("Nuovo codice richiesto. Controlla la posta.");
+  } catch (error) {
+    setStatus("Errore: " + error.message);
+  } finally {
+    setBusy(false);
+  }
+}
+
+function goBackToRegistration() {
+  if (isBusy) return;
+
+  pendingSignup = null;
+  verificationSection.classList.add("hidden");
+  registrationFields.classList.remove("hidden");
+  $("verificationCode").value = "";
+  setStatus("Puoi modificare i dati di registrazione.");
+}
+
 async function loginAccount() {
-  const email = $("email").value.trim();
-  const password = $("password").value;
+  if (isBusy) return;
+
+  const email = $("loginEmail").value.trim().toLowerCase();
+  const password = $("loginPassword").value;
 
   if (!email || !password) {
     setStatus("Inserisci email e password.");
     return;
   }
 
-  setBusy(true);
-  setStatus("Accesso in corso...");
-
   try {
+    setBusy(true);
+    setStatus("Accesso in corso...");
+
     const { data, error } = await client.auth.signInWithPassword({
       email,
       password
@@ -388,6 +537,24 @@ async function logoutAccount() {
   }
 }
 
+async function checkExistingSubscription() {
+  try {
+    if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+      return;
+    }
+
+    await navigator.serviceWorker.register("/service-worker.js");
+    const readyRegistration = await navigator.serviceWorker.ready;
+    const subscription =
+      await readyRegistration.pushManager.getSubscription();
+
+    testButton.disabled = !subscription ||
+      Notification.permission !== "granted";
+  } catch {
+    testButton.disabled = true;
+  }
+}
+
 async function getRegistration() {
   if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
     throw new Error("Questo browser non supporta le notifiche push.");
@@ -406,7 +573,9 @@ async function enableNotifications() {
   testButton.disabled = true;
 
   try {
-    if (!currentUser) throw new Error("Accedi prima al tuo account.");
+    if (!currentUser) {
+      throw new Error("Accedi prima al tuo account.");
+    }
 
     if (!("Notification" in window)) {
       throw new Error("Notifiche non supportate.");
@@ -462,7 +631,9 @@ async function sendTestNotification() {
   testButton.disabled = true;
 
   try {
-    if (!currentUser) throw new Error("Accedi prima al tuo account.");
+    if (!currentUser) {
+      throw new Error("Accedi prima al tuo account.");
+    }
 
     const registration = await getRegistration();
     const subscription =
@@ -503,7 +674,10 @@ async function sendTestNotification() {
   }
 }
 
-registerButton.addEventListener("click", registerAccount);
+requestCodeButton.addEventListener("click", requestEmailCode);
+verifyButton.addEventListener("click", verifyEmailCode);
+resendCodeButton.addEventListener("click", resendEmailCode);
+backButton.addEventListener("click", goBackToRegistration);
 loginButton.addEventListener("click", loginAccount);
 logoutButton.addEventListener("click", logoutAccount);
 enableButton.addEventListener("click", enableNotifications);
