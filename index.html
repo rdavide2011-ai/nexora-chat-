@@ -2,757 +2,887 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#071b20">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Nexora Chat">
-  <link rel="icon" type="image/png" href="/logo.png">
-  <link rel="apple-touch-icon" href="/logo.png">
-  <title>Nexora Chat</title>
-  <style>
-    * { box-sizing: border-box; }
-    :root {
-      color-scheme: dark;
-      --bg: #07171c;
-      --panel: #0d252b;
-      --input: #091b20;
-      --border: #16434a;
-      --accent: #00e5c3;
-      --text: #f3ffff;
-      --muted: #a5c5c9;
-    }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      min-height: 100dvh;
-      padding: 20px;
-      display: grid;
-      place-items: center;
-      background:
-        radial-gradient(ellipse at 50% 0%, #06464a 0%, transparent 52%),
-        linear-gradient(145deg, #061317, #09232a 55%, #061317);
-      color: var(--text);
-      font-family: Arial, Helvetica, sans-serif;
-    }
-    main {
-      width: 100%;
-      max-width: 430px;
-      padding: 28px 23px;
-      border: 1px solid #17616a;
-      border-radius: 25px;
-      background: linear-gradient(160deg, #102d33, #091d23);
-      box-shadow: 0 24px 80px #0008, 0 0 30px #00e5c30d;
-    }
-    .logo {
-      display: block;
-      width: 112px;
-      height: 112px;
-      object-fit: contain;
-      margin: 0 auto 12px;
-      border-radius: 22px;
-      filter: drop-shadow(0 0 16px #00e5c326);
-    }
-    h1, .subtitle { text-align: center; }
-    h1 {
-      margin: 8px 0;
-      font-size: 27px;
-      letter-spacing: 1px;
-    }
-    .subtitle {
-      margin: 0 0 25px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-    h2 { font-size: 19px; }
-    label {
-      display: block;
-      margin: 13px 0 6px;
-      color: #d8eeee;
-      font-size: 13px;
-    }
-    input {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #245058;
-      border-radius: 12px;
-      outline: none;
-      background: var(--input);
-      color: white;
-      font-size: 16px;
-      transition: border-color .2s, box-shadow .2s;
-    }
-    input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px #00e5c31c;
-    }
-    button {
-      width: 100%;
-      min-height: 46px;
-      padding: 13px 15px;
-      margin-top: 12px;
-      border: 1px solid transparent;
-      border-radius: 12px;
-      background: linear-gradient(110deg, #00bfa5, #00e5c3);
-      color: #03221f;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform .15s, filter .15s;
-    }
-    button:hover:not(:disabled) {
-      filter: brightness(1.08);
-      transform: translateY(-1px);
-    }
-    button.secondary {
-      background: #12363c;
-      border-color: #24545b;
-      color: #e9ffff;
-    }
-    button.danger {
-      background: #542b36;
-      border-color: #75404b;
-      color: #fff;
-    }
-    button:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-      transform: none;
-    }
-    .separator {
-      height: 1px;
-      margin: 24px 0;
-      background: linear-gradient(90deg, transparent, #28616a, transparent);
-    }
-    .hidden { display: none !important; }
-    #status {
-      margin: 18px 0 0;
-      color: #a8e9e2;
-      font-size: 13px;
-      line-height: 1.5;
-      overflow-wrap: anywhere;
-      text-align: center;
-    }
-    .account {
-      padding: 15px;
-      border: 1px solid #1a454c;
-      border-radius: 13px;
-      background: #091b20;
-      overflow-wrap: anywhere;
-    }
-    .account strong {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--accent);
-    }
-    .small {
-      color: #a5c5c9;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-    .code-input {
-      text-align: center;
-      letter-spacing: 8px;
-      font-size: 24px;
-      font-weight: bold;
-    }
-    @media (max-width: 380px) {
-      body { padding: 12px; }
-      main { padding: 22px 17px; }
-      .logo { width: 94px; height: 94px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1719">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Nexora Chat">
+<link rel="icon" type="image/png" href="/logo.png">
+<link rel="apple-touch-icon" href="/logo.png">
+<title>Nexora Chat</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg:#0b1416;
+  --panel:#111f22;
+  --panel2:#17282b;
+  --input:#1a2b2e;
+  --border:#263b3e;
+  --text:#eef8f7;
+  --muted:#91a8a9;
+  --accent:#00d9b4;
+  --accentText:#03241f;
+  --bubbleMe:#075e50;
+  --bubbleOther:#1b2b2e;
+  --shadow:0 20px 70px #0003;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme:light;
+    --bg:#eaf0ef;
+    --panel:#fff;
+    --panel2:#f2f7f6;
+    --input:#f1f5f4;
+    --border:#dce6e4;
+    --text:#172827;
+    --muted:#708381;
+    --accent:#00a98d;
+    --accentText:#fff;
+    --bubbleMe:#c9f5e8;
+    --bubbleOther:#fff;
+    --shadow:0 15px 50px #163d3510;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+.hidden{display:none!important}
+.muted{color:var(--muted)}
+.small{font-size:12px;line-height:1.5;color:var(--muted)}
+.primary{
+  border:0;border-radius:12px;background:var(--accent);
+  color:var(--accentText);font-weight:750;padding:13px 16px;
+}
+.secondary{
+  border:1px solid var(--border);border-radius:12px;
+  background:var(--panel2);color:var(--text);padding:12px 15px;
+}
+.danger{background:#742d3a!important;color:white!important}
+input,textarea{
+  width:100%;border:1px solid var(--border);border-radius:12px;
+  padding:13px;background:var(--input);color:var(--text);outline:none;
+}
+input:focus,textarea:focus{border-color:var(--accent)}
+label{display:block;font-size:13px;margin:14px 0 6px;color:var(--muted)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* Autenticazione */
+#authSection{
+  min-height:100%;overflow:auto;display:grid;place-items:center;padding:22px;
+  background:radial-gradient(ellipse at top,#06483f44,transparent 55%),var(--bg);
+}
+.auth-card{
+  width:100%;max-width:420px;padding:30px;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:25px;box-shadow:var(--shadow);
+}
+.logo{display:block;width:86px;height:86px;object-fit:contain;margin:0 auto 12px}
+.auth-card h1{text-align:center;margin:8px 0;font-size:28px;letter-spacing:-.8px}
+.subtitle{text-align:center;color:var(--muted);font-size:14px;margin:0 0 24px}
+.auth-card h2{font-size:18px;margin:0 0 8px}
+.auth-card button{width:100%;margin-top:12px}
+.separator{height:1px;background:var(--border);margin:24px 0}
+.code-input{text-align:center;letter-spacing:8px;font-size:24px;font-weight:700}
+#status{font-size:13px;line-height:1.5;text-align:center;color:var(--accent);overflow-wrap:anywhere;margin:18px 0 0}
+
+/* Applicazione */
+#appSection{height:100%;width:100%;display:flex;flex-direction:column}
+.topbar{
+  height:70px;flex:none;display:flex;align-items:center;gap:14px;
+  padding:0 22px;background:var(--panel);border-bottom:1px solid var(--border);
+}
+.brand{display:flex;align-items:center;gap:10px;min-width:225px}
+.brand img{width:38px;height:38px;object-fit:contain;border-radius:10px}
+.brand-name{font-size:19px;font-weight:800;letter-spacing:-.5px}
+.brand-name span{color:var(--accent)}
+.top-search{flex:1;max-width:570px;margin:auto;position:relative}
+.top-search input{border-radius:13px;padding:11px 15px 11px 40px}
+.search-icon{position:absolute;left:14px;top:11px;color:var(--muted)}
+.top-actions{display:flex;align-items:center;gap:9px}
+.icon-button{
+  width:42px;height:42px;display:grid;place-items:center;
+  border:1px solid var(--border);background:var(--panel2);
+  color:var(--text);border-radius:13px;font-size:18px;
+}
+.avatar{
+  width:42px;height:42px;flex:none;border-radius:50%;
+  display:grid;place-items:center;background:#174b43;color:#a7ffeb;
+  font-weight:800;overflow:hidden;
+}
+.workspace{display:flex;flex:1;min-height:0;padding:14px;gap:14px}
+.sidebar{
+  width:340px;max-width:37%;flex:none;min-height:0;display:flex;flex-direction:column;
+  background:var(--panel);border:1px solid var(--border);border-radius:19px;overflow:hidden;
+}
+.side-heading{padding:20px 18px 12px;display:flex;align-items:center;justify-content:space-between}
+.side-heading h2{font-size:21px;margin:0;letter-spacing:-.5px}
+.side-heading button{width:38px;height:38px;border-radius:12px}
+.filters{display:flex;gap:7px;padding:0 16px 15px;overflow:auto}
+.filter{
+  border:1px solid var(--border);background:var(--panel2);color:var(--muted);
+  padding:8px 12px;border-radius:20px;white-space:nowrap;font-size:12px;
+}
+.filter.active{background:var(--accent);color:var(--accentText);border-color:transparent;font-weight:700}
+.conversation-list{overflow:auto;flex:1;padding:0 8px 10px}
+.conversation{
+  display:flex;gap:12px;align-items:center;padding:13px 10px;border-radius:13px;
+  cursor:pointer;transition:background .15s;
+}
+.conversation:hover,.conversation.active{background:var(--panel2)}
+.conversation.active{box-shadow:inset 3px 0 var(--accent)}
+.conversation .avatar{width:47px;height:47px;font-size:14px}
+.conversation-copy{min-width:0;flex:1}
+.conversation-top{display:flex;justify-content:space-between;gap:6px;align-items:center}
+.conversation-name{font-weight:700;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.conversation-time{font-size:10px;color:var(--muted);white-space:nowrap}
+.conversation-preview{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:5px}
+.unread{font-size:10px;background:var(--accent);color:var(--accentText);border-radius:20px;padding:3px 6px;font-weight:800}
+.sidebar-footer{border-top:1px solid var(--border);padding:12px;display:flex;gap:8px}
+.sidebar-footer button{flex:1;font-size:12px;padding:10px 7px}
+.chat-panel{
+  flex:1;min-width:0;min-height:0;background:var(--panel);
+  border:1px solid var(--border);border-radius:19px;display:flex;flex-direction:column;overflow:hidden;
+}
+.chat-header{
+  display:flex;align-items:center;gap:12px;padding:15px 20px;
+  border-bottom:1px solid var(--border);min-height:75px;
+}
+.chat-header .avatar{width:44px;height:44px}
+.chat-person{flex:1;min-width:0}
+.chat-person strong{display:block;font-size:15px}
+.chat-person span{font-size:12px;color:var(--muted);display:block;margin-top:4px}
+.header-tools{display:flex;gap:8px}
+.header-tools button{width:39px;height:39px;border-radius:12px}
+.mobile-back{display:none}
+.messages{
+  flex:1;min-height:0;overflow-y:auto;padding:24px clamp(14px,4vw,55px);
+  display:flex;flex-direction:column;gap:10px;
+  background:
+    radial-gradient(ellipse at 50% 30%,#00d9b405,transparent 65%);
+}
+.day-label{
+  align-self:center;padding:7px 12px;border-radius:10px;
+  background:var(--panel2);color:var(--muted);font-size:11px;margin:0 0 12px;
+}
+.message-row{display:flex;flex-direction:column;max-width:min(70%,600px);align-self:flex-start}
+.message-row.mine{align-self:flex-end}
+.message-bubble{
+  padding:11px 14px;border-radius:15px 15px 15px 4px;
+  background:var(--bubbleOther);font-size:14px;line-height:1.5;
+  overflow-wrap:anywhere;white-space:pre-wrap;
+}
+.mine .message-bubble{background:var(--bubbleMe);border-radius:15px 15px 4px 15px}
+.message-meta{font-size:10px;color:var(--muted);text-align:right;margin:4px 4px 0}
+.composer-wrap{padding:14px 18px 16px;border-top:1px solid var(--border)}
+.composer{display:flex;align-items:flex-end;gap:10px;max-width:1000px;margin:auto}
+.composer textarea{
+  resize:none;min-height:46px;max-height:130px;padding:13px 15px;
+  border-radius:15px;line-height:1.4;
+}
+.send-button{width:47px;height:47px;flex:none;border-radius:15px;border:0;background:var(--accent);color:var(--accentText);font-size:19px;font-weight:900}
+.composer-hint{font-size:10px;color:var(--muted);text-align:center;margin-top:8px}
+.empty-state{margin:auto;text-align:center;max-width:360px;padding:25px}
+.empty-icon{font-size:44px;margin-bottom:15px}
+.empty-state h2{margin:0 0 8px}
+.empty-state p{color:var(--muted);line-height:1.6;font-size:13px}
+#settingsPanel{
+  position:fixed;inset:0;background:#0008;z-index:20;
+  display:grid;place-items:center;padding:20px;
+}
+.settings-card{
+  width:100%;max-width:420px;padding:24px;background:var(--panel);
+  border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);
+}
+.settings-card h2{margin-top:0}
+.settings-card button{width:100%;margin-top:10px}
+@media(min-width:1500px){
+  .workspace{padding:20px;gap:20px}
+  .sidebar{width:390px}
+  .messages{padding-left:clamp(50px,7vw,130px);padding-right:clamp(50px,7vw,130px)}
+  .topbar{height:78px;padding:0 30px}
+}
+@media(max-width:800px){
+  .topbar{height:62px;padding:0 12px;gap:9px}
+  .brand{min-width:0;flex:1;gap:8px}
+  .brand img{width:34px;height:34px}
+  .brand-name{font-size:17px}
+  .top-search{display:none}
+  .top-actions{gap:6px}
+  .top-actions .icon-button{width:38px;height:38px}
+  .workspace{padding:0;gap:0}
+  .sidebar{width:100%;max-width:none;border:0;border-radius:0}
+  .chat-panel{display:none;border:0;border-radius:0}
+  #appSection.chat-open .sidebar{display:none}
+  #appSection.chat-open .chat-panel{display:flex}
+  .side-heading{padding:18px 16px 12px}
+  .conversation-list{padding:0 8px}
+  .conversation{padding:14px 10px}
+  .chat-header{padding:10px 12px;min-height:65px;gap:9px}
+  .mobile-back{display:grid;width:34px;height:38px;border:0;background:transparent;color:var(--text);font-size:24px;place-items:center}
+  .header-tools .icon-button{width:35px;height:35px}
+  .header-tools .desktop-only{display:none}
+  .messages{padding:18px 12px;gap:9px}
+  .message-row{max-width:86%}
+  .message-bubble{font-size:14px;padding:10px 12px}
+  .composer-wrap{padding:10px 10px calc(10px + env(safe-area-inset-bottom))}
+  .composer{gap:7px}
+  .composer textarea{font-size:16px;min-height:44px}
+  .send-button{width:44px;height:44px}
+  .sidebar-footer{padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+}
+@media(max-width:420px){
+  .auth-card{padding:24px 19px}
+  .topbar{padding:0 9px}
+  .header-tools{gap:4px}
+  .conversation-time{font-size:9px}
+}
+</style>
 </head>
 <body>
-<main>
-  <img class="logo" src="/logo.png" alt="Logo Nexora Chat">
-  <h1>Nexora Chat</h1>
-  <p class="subtitle">La tua conversazione, il tuo spazio.</p>
 
-  <section id="authSection">
+<section id="authSection">
+  <div class="auth-card">
+    <img class="logo" src="/logo.png" alt="Nexora">
+    <h1>Nexora Chat</h1>
+    <p class="subtitle">La tua conversazione, il tuo spazio.</p>
+
     <div id="registrationFields">
+      <h2>Crea il tuo account</h2>
       <label for="username">Username</label>
-      <input id="username" type="text" autocomplete="username"
-        maxlength="24" placeholder="Il tuo username">
-
+      <input id="username" autocomplete="username" maxlength="24" placeholder="Il tuo username">
       <label for="email">Email</label>
-      <input id="email" type="email" autocomplete="email"
-        placeholder="nome@esempio.it">
-
+      <input id="email" type="email" autocomplete="email" placeholder="nome@esempio.it">
       <label for="password">Password</label>
-      <input id="password" type="password"
-        autocomplete="new-password" minlength="8"
-        placeholder="Almeno 8 caratteri">
-
-      <button id="requestCodeButton">Invia codice di verifica</button>
+      <input id="password" type="password" autocomplete="new-password" minlength="8" placeholder="Almeno 8 caratteri">
+      <button class="primary" id="requestCodeButton">Crea account</button>
     </div>
 
-    <section id="verificationSection" class="hidden">
-      <p class="small">
-        Inserisci il codice di verifica ricevuto via email.
-        Il codice scade dopo 10 minuti.
-      </p>
-
-      <label for="verificationCode">Codice email</label>
-      <input id="verificationCode" class="code-input"
-        type="text" inputmode="numeric" autocomplete="one-time-code"
-        maxlength="6" placeholder="000000">
-
-      <button id="verifyButton">Verifica e crea account</button>
-      <button id="resendCodeButton" class="secondary">Invia un nuovo codice</button>
-      <button id="backButton" class="secondary">Indietro</button>
-    </section>
+    <div id="verificationSection" class="hidden">
+      <p class="small">Inserisci il codice ricevuto via email. Il codice scade dopo 10 minuti.</p>
+      <label for="verificationCode">Codice di verifica</label>
+      <input id="verificationCode" class="code-input" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000">
+      <button class="primary" id="verifyButton">Verifica e crea account</button>
+      <button class="secondary" id="resendCodeButton">Invia un nuovo codice</button>
+      <button class="secondary" id="backButton">Indietro</button>
+    </div>
 
     <div class="separator"></div>
     <h2>Accedi</h2>
-
     <label for="loginEmail">Email oppure username</label>
-    <input id="loginEmail" type="text" autocomplete="username"
-      placeholder="nome@esempio.it oppure username">
-
+    <input id="loginEmail" autocomplete="username" placeholder="Email o username">
     <label for="loginPassword">Password</label>
-    <input id="loginPassword" type="password"
-      autocomplete="current-password" placeholder="La tua password">
+    <input id="loginPassword" type="password" autocomplete="current-password" placeholder="La tua password">
+    <button class="secondary" id="loginButton">Accedi</button>
+    <p id="status" role="status" aria-live="polite">Caricamento...</p>
+  </div>
+</section>
 
-    <button id="loginButton" class="secondary">Accedi</button>
-  </section>
-
-  <section id="appSection" class="hidden">
-    <div class="account">
-      <strong id="welcome">Account</strong>
-      <span id="accountEmail"></span>
+<section id="appSection" class="hidden">
+  <header class="topbar">
+    <div class="brand">
+      <img src="/logo.png" alt="">
+      <div class="brand-name">Nexora <span>Chat</span></div>
     </div>
+    <div class="top-search">
+      <span class="search-icon">⌕</span>
+      <input id="globalSearch" placeholder="Cerca conversazioni..." aria-label="Cerca conversazioni">
+    </div>
+    <div class="top-actions">
+      <button class="icon-button" id="themeButton" title="Cambia tema" aria-label="Cambia tema">◐</button>
+      <button class="icon-button" id="settingsButton" title="Impostazioni" aria-label="Impostazioni">⚙</button>
+      <div class="avatar" id="topAvatar">N</div>
+    </div>
+  </header>
 
-    <div class="separator"></div>
-    <h2>Notifiche</h2>
-    <p class="small">
-      Attiva le notifiche su questo dispositivo per ricevere gli avvisi push.
-    </p>
+  <div class="workspace">
+    <aside class="sidebar">
+      <div class="side-heading">
+        <h2>Messaggi</h2>
+        <button class="icon-button" id="newChatButton" title="Nuova conversazione" aria-label="Nuova conversazione">＋</button>
+      </div>
+      <div class="filters">
+        <button class="filter active" data-filter="all">Tutte</button>
+        <button class="filter" data-filter="unread">Non lette</button>
+        <button class="filter" data-filter="favorites">Preferite</button>
+      </div>
+      <div class="conversation-list" id="conversationList"></div>
+      <div class="sidebar-footer">
+        <button class="secondary" id="notificationsButton">♧ Notifiche</button>
+        <button class="secondary" id="logoutButton">Esci</button>
+      </div>
+    </aside>
 
-    <button id="enableNotifications">Attiva notifiche</button>
-    <button id="testNotification" class="secondary" disabled>
-      Ricevi notifica di test
-    </button>
+    <section class="chat-panel">
+      <header class="chat-header">
+        <button class="mobile-back" id="backToChats" aria-label="Torna alle conversazioni">‹</button>
+        <div class="avatar" id="chatAvatar">N</div>
+        <div class="chat-person">
+          <strong id="chatName">Nexora Chat</strong>
+          <span id="chatSubtitle">Seleziona una conversazione</span>
+        </div>
+        <div class="header-tools">
+          <button class="icon-button desktop-only" id="searchMessagesButton" title="Cerca nei messaggi">⌕</button>
+          <button class="icon-button" id="chatInfoButton" title="Informazioni">ⓘ</button>
+        </div>
+      </header>
+      <div class="messages" id="messages">
+        <div class="empty-state">
+          <div class="empty-icon">✳</div>
+          <h2>Benvenuto su Nexora</h2>
+          <p>Seleziona una conversazione oppure creane una nuova per iniziare.</p>
+        </div>
+      </div>
+      <div class="composer-wrap">
+        <form class="composer" id="composer">
+          <textarea id="messageInput" rows="1" placeholder="Scrivi un messaggio..." aria-label="Scrivi un messaggio"></textarea>
+          <button class="send-button" type="submit" aria-label="Invia messaggio">➤</button>
+        </form>
+        <div class="composer-hint">Invio per spedire · Maiusc + Invio per andare a capo</div>
+      </div>
+    </section>
+  </div>
+</section>
 
-    <button id="logoutButton" class="danger">Esci dall'account</button>
-  </section>
-
-  <p id="status" role="status" aria-live="polite">Caricamento...</p>
-</main>
+<div id="settingsPanel" class="hidden">
+  <div class="settings-card">
+    <h2>Impostazioni</h2>
+    <p class="small">Il tuo account Nexora</p>
+    <div class="account">
+      <strong id="settingsUsername"></strong>
+      <div class="small" id="settingsEmail"></div>
+    </div>
+    <button class="secondary" id="enableNotifications">Attiva notifiche push</button>
+    <button class="secondary" id="testNotification" disabled>Invia notifica di test</button>
+    <button class="secondary" id="closeSettings">Chiudi</button>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 "use strict";
 
-const SUPABASE_URL = "https://dycbbhqzpgnnyilzwuwa.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_zYdD5LSAKMFRNk-Yas3Hxg_oogRDb3a";
+const SUPABASE_URL="https://dycbbhqzpgnnyilzwuwa.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_zYdD5LSAKMFRNk-Yas3Hxg_oogRDb3a";
+const VAPID_PUBLIC_KEY="BEerw_zOGMn7TBC13Ike0xTlXx09tCoLdeE8omauraJ362wgWvy3rhH_GQ6qJ6a1wO9sbqvV3X0W0OF_Hp8d8Uw";
+const FUNCTION_URL=SUPABASE_URL+"/functions/v1/schedule-test-notification";
+const REQUEST_CODE_URL=SUPABASE_URL+"/functions/v1/request-email-code";
+const VERIFY_CODE_URL=SUPABASE_URL+"/functions/v1/verify-email-code";
+const {createClient}=supabase;
+const client=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
+  auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
+});
+const $=id=>document.getElementById(id);
 
-const VAPID_PUBLIC_KEY =
-  "BEerw_zOGMn7TBC13Ike0xTlXx09tCoLdeE8omauraJ362wgWvy3rhH_GQ6qJ6a1wO9sbqvV3X0W0OF_Hp8d8Uw";
+const authSection=$("authSection");
+const appSection=$("appSection");
+const statusElement=$("status");
+const registrationFields=$("registrationFields");
+const verificationSection=$("verificationSection");
+const requestCodeButton=$("requestCodeButton");
+const verifyButton=$("verifyButton");
+const resendCodeButton=$("resendCodeButton");
+const backButton=$("backButton");
+const loginButton=$("loginButton");
+const logoutButton=$("logoutButton");
+const enableButton=$("enableNotifications");
+const testButton=$("testNotification");
 
-const FUNCTION_URL =
-  SUPABASE_URL + "/functions/v1/schedule-test-notification";
+let currentUser=null;
+let pendingSignup=null;
+let isBusy=false;
+let activeChatId=null;
+let activeFilter="all";
+let notificationSubscription=null;
+let currentTheme="auto";
 
-const REQUEST_CODE_URL =
-  SUPABASE_URL + "/functions/v1/request-email-code";
+const initialConversations=[
+  {id:"demo1",name:"Nexora Team",avatar:"N",color:"#175e50",favorite:true,unread:1,
+   messages:[
+    {text:"Benvenuto su Nexora Chat! 👋",mine:false,time:"09:40"},
+    {text:"Questa è un'anteprima della nuova interfaccia.",mine:false,time:"09:41"},
+    {text:"Possiamo iniziare a progettare la nostra chat.",mine:true,time:"09:42"},
+    {text:"Perfetto! La grafica si adatta a ogni dispositivo ✨",mine:false,time:"09:43"}
+   ]},
+  {id:"demo2",name:"Andrea",avatar:"A",color:"#5169a7",favorite:false,unread:0,
+   messages:[
+    {text:"Ehi, hai visto il nuovo progetto?",mine:false,time:"Ieri"},
+    {text:"Sì, la nuova grafica mi piace!",mine:true,time:"Ieri"}
+   ]},
+  {id:"demo3",name:"Design Studio",avatar:"D",color:"#9b658d",favorite:true,unread:0,
+   messages:[
+    {text:"Stiamo lavorando al design della chat.",mine:false,time:"Lun"},
+    {text:"Vogliamo un'interfaccia pulita e veloce.",mine:false,time:"Lun"}
+   ]},
+  {id:"demo4",name:"Marco",avatar:"M",color:"#9b7542",favorite:false,unread:0,
+   messages:[
+    {text:"Ci sentiamo più tardi?",mine:false,time:"Dom"},
+    {text:"Certo, a dopo!",mine:true,time:"Dom"}
+   ]}
+];
 
-const VERIFY_CODE_URL =
-  SUPABASE_URL + "/functions/v1/verify-email-code";
-
-const { createClient } = supabase;
-
-const client = createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true
-    }
+let conversations=[];
+function storageKey(){return "nexora_demo_messages_v1";}
+function loadConversations(){
+  try{
+    const saved=localStorage.getItem(storageKey());
+    conversations=saved?JSON.parse(saved):structuredClone(initialConversations);
+    if(!Array.isArray(conversations)) throw new Error("Dati non validi");
+  }catch{
+    conversations=JSON.parse(JSON.stringify(initialConversations));
   }
-);
-
-const $ = id => document.getElementById(id);
-
-const authSection = $("authSection");
-const appSection = $("appSection");
-const statusElement = $("status");
-const registrationFields = $("registrationFields");
-const verificationSection = $("verificationSection");
-
-const requestCodeButton = $("requestCodeButton");
-const verifyButton = $("verifyButton");
-const resendCodeButton = $("resendCodeButton");
-const backButton = $("backButton");
-const loginButton = $("loginButton");
-const logoutButton = $("logoutButton");
-const enableButton = $("enableNotifications");
-const testButton = $("testNotification");
-
-let currentUser = null;
-let pendingSignup = null;
-let isBusy = false;
-
-function setStatus(message) {
-  statusElement.textContent = message;
 }
-
-function setBusy(busy) {
-  isBusy = busy;
-  requestCodeButton.disabled = busy;
-  verifyButton.disabled = busy;
-  resendCodeButton.disabled = busy;
-  backButton.disabled = busy;
-  loginButton.disabled = busy;
+function saveConversations(){
+  try{localStorage.setItem(storageKey(),JSON.stringify(conversations));}
+  catch(error){console.warn("Impossibile salvare i messaggi nel browser",error);}
 }
-
-function urlBase64ToUint8Array(value) {
-  const padding = "=".repeat((4 - value.length % 4) % 4);
-  const base64 = (value + padding)
-    .replace(/-/g, "+")
-    .replace(/_/g, "/");
-
-  const raw = atob(base64);
-  return Uint8Array.from(
-    raw,
-    character => character.charCodeAt(0)
-  );
+function setStatus(message){
+  if(statusElement) statusElement.textContent=message;
 }
-
-function showAuth() {
-  currentUser = null;
+function setBusy(busy){
+  isBusy=busy;
+  [requestCodeButton,verifyButton,resendCodeButton,backButton,loginButton]
+    .forEach(button=>button.disabled=busy);
+}
+function showAuth(){
+  currentUser=null;
   authSection.classList.remove("hidden");
   appSection.classList.add("hidden");
-  testButton.disabled = true;
+  appSection.classList.remove("chat-open");
+  testButton.disabled=true;
 }
-
-function showApp(user) {
-  currentUser = user;
+function showApp(user){
+  currentUser=user;
   authSection.classList.add("hidden");
   appSection.classList.remove("hidden");
-
-  const username = user.user_metadata?.username;
-  $("welcome").textContent = username
-    ? "Ciao, " + username
-    : "Account Nexora";
-
-  $("accountEmail").textContent = user.email || "";
-  setStatus("Accesso effettuato.");
+  const username=user.user_metadata?.username||user.email?.split("@")[0]||"Nexora";
+  $("topAvatar").textContent=username.slice(0,1).toUpperCase();
+  $("settingsUsername").textContent="@"+username;
+  $("settingsEmail").textContent=user.email||"";
+  renderConversations();
   checkExistingSubscription();
+  if(!activeChatId && conversations.length) selectChat(conversations[0].id,false);
 }
-
-async function callFunction(url, body) {
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "apikey": SUPABASE_PUBLISHABLE_KEY,
-      "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
+async function callFunction(url,body){
+  const response=await fetch(url,{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "apikey":SUPABASE_PUBLISHABLE_KEY,
+      "Authorization":"Bearer "+SUPABASE_PUBLISHABLE_KEY
     },
-    body: JSON.stringify(body)
+    body:JSON.stringify(body)
   });
-
-  const result = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(
-      result.error || "Errore del server (HTTP " + response.status + ")."
-    );
-  }
-
+  const result=await response.json().catch(()=>({}));
+  if(!response.ok) throw new Error(result.error||"Errore del server (HTTP "+response.status+").");
   return result;
 }
-
-function getSignupFields() {
+function getSignupFields(){
   return {
-    username: $("username").value.trim(),
-    email: $("email").value.trim().toLowerCase(),
-    password: $("password").value
+    username:$("username").value.trim(),
+    email:$("email").value.trim().toLowerCase(),
+    password:$("password").value
   };
 }
-
-function validateSignup(fields) {
-  if (fields.username.length < 3 || fields.username.length > 24) {
+function validateSignup(fields){
+  if(fields.username.length<3||fields.username.length>24)
     throw new Error("Lo username deve contenere da 3 a 24 caratteri.");
-  }
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) {
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email))
     throw new Error("Inserisci un indirizzo email valido.");
-  }
-
-  if (fields.password.length < 8) {
+  if(fields.password.length<8)
     throw new Error("La password deve contenere almeno 8 caratteri.");
-  }
 }
-
-async function requestEmailCode() {
-  if (isBusy) return;
-
-  const fields = getSignupFields();
-
-  try {
+async function requestEmailCode(){
+  if(isBusy)return;
+  const fields=getSignupFields();
+  try{
     validateSignup(fields);
-    setBusy(true);
-    setStatus("Invio del codice email...");
-
-    await callFunction(REQUEST_CODE_URL, {
-      email: fields.email,
-      username: fields.username
-    });
-
-    pendingSignup = fields;
-    $("verificationCode").value = "";
+    setBusy(true);setStatus("Invio del codice email...");
+    await callFunction(REQUEST_CODE_URL,{email:fields.email,username:fields.username});
+    pendingSignup=fields;
+    $("verificationCode").value="";
     registrationFields.classList.add("hidden");
     verificationSection.classList.remove("hidden");
-    $("loginEmail").value = fields.email;
-
+    $("loginEmail").value=fields.email;
     setStatus("Codice richiesto. Controlla la posta e lo spam.");
-  } catch (error) {
-    setStatus("Errore: " + error.message);
-  } finally {
-    setBusy(false);
-  }
+  }catch(error){setStatus("Errore: "+error.message);}
+  finally{setBusy(false);}
 }
-
-async function verifyEmailCode() {
-  if (isBusy) return;
-
-  if (!pendingSignup) {
-    setStatus("Richiedi prima un codice di verifica.");
-    return;
-  }
-
-  const code = $("verificationCode").value.trim();
-
-  if (!/^\d{6}$/.test(code)) {
-    setStatus("Inserisci il codice di 6 cifre.");
-    return;
-  }
-
-  try {
-    setBusy(true);
-    setStatus("Verifica del codice e creazione dell'account...");
-
-    await callFunction(VERIFY_CODE_URL, {
-      email: pendingSignup.email,
-      username: pendingSignup.username,
-      password: pendingSignup.password,
-      code
+async function verifyEmailCode(){
+  if(isBusy)return;
+  if(!pendingSignup){setStatus("Richiedi prima un codice di verifica.");return;}
+  const code=$("verificationCode").value.trim();
+  if(!/^\d{6}$/.test(code)){setStatus("Inserisci il codice di 6 cifre.");return;}
+  try{
+    setBusy(true);setStatus("Verifica del codice e creazione dell'account...");
+    await callFunction(VERIFY_CODE_URL,{
+      email:pendingSignup.email,username:pendingSignup.username,
+      password:pendingSignup.password,code
     });
-
-    $("loginEmail").value = pendingSignup.email;
-    $("loginPassword").value = pendingSignup.password;
-
-    const loginResult = await client.auth.signInWithPassword({
-      email: pendingSignup.email,
-      password: pendingSignup.password
+    const account=pendingSignup;
+    $("loginEmail").value=account.email;
+    $("loginPassword").value=account.password;
+    const result=await client.auth.signInWithPassword({
+      email:account.email,password:account.password
     });
-
-    if (loginResult.error) {
-      pendingSignup = null;
+    if(result.error){
+      pendingSignup=null;
       registrationFields.classList.remove("hidden");
       verificationSection.classList.add("hidden");
-      setStatus("Account creato e email verificata. Accedi con email e password.");
+      setStatus("Account creato. Accedi con email e password.");
       return;
     }
-
-    pendingSignup = null;
-    $("password").value = "";
-    $("loginPassword").value = "";
-
-    showApp(loginResult.data.user);
-    setStatus("Email verificata. Account creato correttamente.");
-  } catch (error) {
-    setStatus("Verifica non riuscita: " + error.message);
-  } finally {
-    setBusy(false);
-  }
+    pendingSignup=null;
+    $("password").value="";
+    $("loginPassword").value="";
+    showApp(result.data.user);
+  }catch(error){setStatus("Verifica non riuscita: "+error.message);}
+  finally{setBusy(false);}
 }
-
-async function resendEmailCode() {
-  if (isBusy) return;
-
-  if (!pendingSignup) {
-    setStatus("Inserisci nuovamente i dati di registrazione.");
-    return;
-  }
-
-  try {
-    setBusy(true);
-    setStatus("Richiesta di un nuovo codice...");
-
-    await callFunction(REQUEST_CODE_URL, {
-      email: pendingSignup.email,
-      username: pendingSignup.username
+async function resendEmailCode(){
+  if(isBusy)return;
+  if(!pendingSignup){setStatus("Inserisci nuovamente i dati di registrazione.");return;}
+  try{
+    setBusy(true);setStatus("Richiesta di un nuovo codice...");
+    await callFunction(REQUEST_CODE_URL,{
+      email:pendingSignup.email,username:pendingSignup.username
     });
-
-    $("verificationCode").value = "";
+    $("verificationCode").value="";
     setStatus("Nuovo codice richiesto. Controlla la posta.");
-  } catch (error) {
-    setStatus("Errore: " + error.message);
-  } finally {
-    setBusy(false);
-  }
+  }catch(error){setStatus("Errore: "+error.message);}
+  finally{setBusy(false);}
 }
-
-function goBackToRegistration() {
-  if (isBusy) return;
-
-  pendingSignup = null;
+function goBackToRegistration(){
+  if(isBusy)return;
+  pendingSignup=null;
   verificationSection.classList.add("hidden");
   registrationFields.classList.remove("hidden");
-  $("verificationCode").value = "";
+  $("verificationCode").value="";
   setStatus("Puoi modificare i dati di registrazione.");
 }
-
-/*
- * LOGIN CON EMAIL O USERNAME
- *
- * Se il campo contiene "@", viene trattato come email.
- * Altrimenti viene cercato lo username tramite la funzione RPC
- * get_login_email creata nel database Supabase.
- */
-async function loginAccount() {
-  if (isBusy) return;
-
-  const identifier = $("loginEmail").value.trim();
-  const password = $("loginPassword").value;
-
-  if (!identifier || !password) {
-    setStatus("Inserisci email o username e password.");
+async function loginAccount(){
+  if(isBusy)return;
+  const identifier=$("loginEmail").value.trim();
+  const password=$("loginPassword").value;
+  if(!identifier||!password){setStatus("Inserisci email o username e password.");return;}
+  try{
+    setBusy(true);setStatus("Accesso in corso...");
+    let email=identifier.toLowerCase();
+    if(!identifier.includes("@")){
+      const {data,error}=await client.rpc("get_login_email",{p_username:identifier});
+      if(error){console.error(error);throw new Error("Impossibile verificare lo username. Riprova.");}
+      if(!data)throw new Error("Username o password non corretti.");
+      email=String(data).trim().toLowerCase();
+    }
+    const {data,error}=await client.auth.signInWithPassword({email,password});
+    if(error)throw new Error("Email/username o password non corretti.");
+    showApp(data.user);
+  }catch(error){setStatus("Accesso non riuscito: "+error.message);}
+  finally{setBusy(false);}
+}
+async function logoutAccount(){
+  try{
+    const {error}=await client.auth.signOut();
+    if(error)throw error;
+    activeChatId=null;
+    showAuth();setStatus("Sei uscito dall'account.");
+  }catch(error){alert("Errore durante l'uscita: "+error.message);}
+}
+function escapeText(value){
+  return String(value).replace(/[&<>"']/g,char=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[char]));
+}
+function getLastMessage(chat){
+  return chat.messages[chat.messages.length-1];
+}
+function renderConversations(){
+  const list=$("conversationList");
+  const query=$("globalSearch").value.trim().toLowerCase();
+  list.replaceChildren();
+  const filtered=conversations.filter(chat=>{
+    const last=getLastMessage(chat);
+    const matches=(chat.name+" "+(last?.text||"")).toLowerCase().includes(query);
+    const filterMatch=activeFilter==="all"||
+      (activeFilter==="unread"&&chat.unread>0)||
+      (activeFilter==="favorites"&&chat.favorite);
+    return matches&&filterMatch;
+  });
+  if(!filtered.length){
+    list.innerHTML='<div class="empty-state"><div class="empty-icon">⌕</div><h2>Nessun risultato</h2><p>Prova con un altro nome o termine.</p></div>';
     return;
   }
-
-  try {
-    setBusy(true);
-    setStatus("Accesso in corso...");
-
-    let email = identifier.toLowerCase();
-
-    if (!identifier.includes("@")) {
-      const {
-        data: resolvedEmail,
-        error: lookupError
-      } = await client.rpc("get_login_email", {
-        p_username: identifier
-      });
-
-      if (lookupError) {
-        console.error("Errore ricerca username:", lookupError);
-        throw new Error("Impossibile verificare lo username. Riprova.");
-      }
-
-      if (!resolvedEmail) {
-        throw new Error("Username o password non corretti.");
-      }
-
-      email = String(resolvedEmail).trim().toLowerCase();
-    }
-
-    const { data, error } = await client.auth.signInWithPassword({
-      email,
-      password
+  filtered.forEach(chat=>{
+    const last=getLastMessage(chat);
+    const row=document.createElement("div");
+    row.className="conversation"+(chat.id===activeChatId?" active":"");
+    row.tabIndex=0;
+    row.setAttribute("role","button");
+    row.innerHTML=`
+      <div class="avatar" style="background:${escapeText(chat.color)}">${escapeText(chat.avatar)}</div>
+      <div class="conversation-copy">
+        <div class="conversation-top">
+          <span class="conversation-name">${escapeText(chat.name)}${chat.favorite?" ★":""}</span>
+          <span class="conversation-time">${escapeText(last?.time||"")}</span>
+        </div>
+        <div class="conversation-top">
+          <span class="conversation-preview">${last?.mine?"Tu: ":""}${escapeText(last?.text||"Nessun messaggio")}</span>
+          ${chat.unread?`<span class="unread">${chat.unread}</span>`:""}
+        </div>
+      </div>`;
+    row.addEventListener("click",()=>selectChat(chat.id,true));
+    row.addEventListener("keydown",event=>{
+      if(event.key==="Enter"||event.key===" "){event.preventDefault();selectChat(chat.id,true);}
     });
-
-    if (error) {
-      throw new Error("Email/username o password non corretti.");
-    }
-
-    showApp(data.user);
-  } catch (error) {
-    setStatus("Accesso non riuscito: " + error.message);
-  } finally {
-    setBusy(false);
-  }
+    list.appendChild(row);
+  });
 }
-
-async function logoutAccount() {
-  logoutButton.disabled = true;
-  setStatus("Uscita dall'account...");
-
-  try {
-    const { error } = await client.auth.signOut();
-    if (error) throw error;
-
-    showAuth();
-    setStatus("Sei uscito dall'account.");
-  } catch (error) {
-    setStatus("Errore durante l'uscita: " + error.message);
-  } finally {
-    logoutButton.disabled = false;
-  }
+function selectChat(id,openMobile=true){
+  activeChatId=id;
+  const chat=conversations.find(item=>item.id===id);
+  if(!chat)return;
+  chat.unread=0;
+  $("chatName").textContent=chat.name;
+  $("chatSubtitle").textContent="Conversazione dimostrativa";
+  $("chatAvatar").textContent=chat.avatar;
+  $("chatAvatar").style.background=chat.color;
+  renderConversations();
+  renderMessages();
+  if(openMobile&&window.matchMedia("(max-width: 800px)").matches)
+    appSection.classList.add("chat-open");
 }
-
-async function checkExistingSubscription() {
-  try {
-    if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-      return;
-    }
-
-    await navigator.serviceWorker.register("/service-worker.js");
-    const readyRegistration = await navigator.serviceWorker.ready;
-    const subscription = await readyRegistration.pushManager.getSubscription();
-
-    testButton.disabled = !subscription ||
-      Notification.permission !== "granted";
-  } catch {
-    testButton.disabled = true;
+function renderMessages(){
+  const area=$("messages");
+  const chat=conversations.find(item=>item.id===activeChatId);
+  if(!chat){
+    area.innerHTML='<div class="empty-state"><div class="empty-icon">✳</div><h2>Benvenuto su Nexora</h2><p>Seleziona una conversazione oppure creane una nuova per iniziare.</p></div>';
+    return;
   }
+  area.replaceChildren();
+  const day=document.createElement("div");
+  day.className="day-label";
+  day.textContent="Oggi";
+  area.appendChild(day);
+  chat.messages.forEach(message=>{
+    const row=document.createElement("div");
+    row.className="message-row"+(message.mine?" mine":"");
+    const bubble=document.createElement("div");
+    bubble.className="message-bubble";
+    bubble.textContent=message.text;
+    const meta=document.createElement("div");
+    meta.className="message-meta";
+    meta.textContent=message.time+(message.mine?"  ✓✓":"");
+    row.append(bubble,meta);
+    area.appendChild(row);
+  });
+  area.scrollTop=area.scrollHeight;
 }
-
-async function getRegistration() {
-  if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+function sendMessage(event){
+  event.preventDefault();
+  const input=$("messageInput");
+  const text=input.value.trim();
+  if(!text||!activeChatId)return;
+  const chat=conversations.find(item=>item.id===activeChatId);
+  if(!chat)return;
+  const time=new Date().toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
+  chat.messages.push({text,mine:true,time});
+  saveConversations();
+  input.value="";
+  input.style.height="auto";
+  renderMessages();
+  renderConversations();
+}
+function createConversation(){
+  const name=prompt("Inserisci il nome della conversazione:");
+  if(!name||!name.trim())return;
+  const clean=name.trim().slice(0,40);
+  const id="local_"+Date.now();
+  conversations.unshift({
+    id,name:clean,avatar:clean.charAt(0).toUpperCase(),
+    color:"#176e60",favorite:false,unread:0,messages:[]
+  });
+  saveConversations();
+  renderConversations();
+  selectChat(id,true);
+}
+function toggleFavorite(){
+  const chat=conversations.find(item=>item.id===activeChatId);
+  if(!chat)return;
+  chat.favorite=!chat.favorite;
+  saveConversations();renderConversations();
+  alert(chat.favorite?"Conversazione aggiunta alle preferite.":"Conversazione rimossa dalle preferite.");
+}
+function urlBase64ToUint8Array(value){
+  const padding="=".repeat((4-value.length%4)%4);
+  const base64=(value+padding).replace(/-/g,"+").replace(/_/g,"/");
+  return Uint8Array.from(atob(base64),character=>character.charCodeAt(0));
+}
+async function getRegistration(){
+  if(!("serviceWorker"in navigator)||!("PushManager"in window))
     throw new Error("Questo browser non supporta le notifiche push.");
-  }
-
-  if (!window.isSecureContext) {
-    throw new Error("Apri Nexora Chat tramite HTTPS.");
-  }
-
+  if(!window.isSecureContext)throw new Error("Apri Nexora Chat tramite HTTPS.");
   await navigator.serviceWorker.register("/service-worker.js");
   return await navigator.serviceWorker.ready;
 }
-
-async function enableNotifications() {
-  enableButton.disabled = true;
-  testButton.disabled = true;
-
-  try {
-    if (!currentUser) {
-      throw new Error("Accedi prima al tuo account.");
-    }
-
-    if (!("Notification" in window)) {
-      throw new Error("Notifiche non supportate.");
-    }
-
-    if (Notification.permission === "denied") {
+async function checkExistingSubscription(){
+  try{
+    if(!("serviceWorker"in navigator)||!("PushManager"in window))return;
+    const registration=await getRegistration();
+    notificationSubscription=await registration.pushManager.getSubscription();
+    testButton.disabled=!notificationSubscription||Notification.permission!=="granted";
+  }catch{testButton.disabled=true;}
+}
+async function enableNotifications(){
+  enableButton.disabled=true;testButton.disabled=true;
+  try{
+    if(!currentUser)throw new Error("Accedi prima al tuo account.");
+    if(!("Notification"in window))throw new Error("Notifiche non supportate.");
+    if(Notification.permission==="denied")
       throw new Error("Notifiche bloccate nelle impostazioni del dispositivo.");
+    const permission=await Notification.requestPermission();
+    if(permission!=="granted")throw new Error("Permesso notifiche non concesso.");
+    const registration=await getRegistration();
+    let subscription=await registration.pushManager.getSubscription();
+    if(subscription){
+      const oldKey=subscription.options.applicationServerKey;
+      const newKey=urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
+      const sameKey=oldKey&&oldKey.byteLength===newKey.byteLength&&
+        newKey.every((byte,index)=>byte===oldKey[index]);
+      if(!sameKey){await subscription.unsubscribe();subscription=null;}
     }
-
-    const permission = await Notification.requestPermission();
-
-    if (permission !== "granted") {
-      throw new Error("Permesso notifiche non concesso.");
-    }
-
-    const registration = await getRegistration();
-    let subscription = await registration.pushManager.getSubscription();
-
-    if (subscription) {
-      const oldKey = subscription.options.applicationServerKey;
-      const newKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
-
-      const sameKey = oldKey &&
-        oldKey.byteLength === newKey.byteLength &&
-        newKey.every((byte, index) => byte === oldKey[index]);
-
-      if (!sameKey) {
-        await subscription.unsubscribe();
-        subscription = null;
-      }
-    }
-
-    if (!subscription) {
-      subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+    if(!subscription){
+      subscription=await registration.pushManager.subscribe({
+        userVisibleOnly:true,
+        applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
       });
     }
-
-    testButton.disabled = false;
-    setStatus("Notifiche attivate su questo dispositivo.");
-  } catch (error) {
-    setStatus("Errore notifiche: " + error.message);
-  } finally {
-    enableButton.disabled = false;
-  }
+    notificationSubscription=subscription;
+    testButton.disabled=false;
+    alert("Notifiche attivate su questo dispositivo.");
+  }catch(error){alert("Errore notifiche: "+error.message);}
+  finally{enableButton.disabled=false;}
 }
-
-async function sendTestNotification() {
-  testButton.disabled = true;
-
-  try {
-    if (!currentUser) {
-      throw new Error("Accedi prima al tuo account.");
-    }
-
-    const registration = await getRegistration();
-    const subscription = await registration.pushManager.getSubscription();
-
-    if (!subscription || Notification.permission !== "granted") {
-      throw new Error("Premi prima Attiva notifiche.");
-    }
-
-    setStatus("Invio della notifica. Attendi circa 5 secondi...");
-
-    const response = await fetch(FUNCTION_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": SUPABASE_PUBLISHABLE_KEY,
-        "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
+async function sendTestNotification(){
+  testButton.disabled=true;
+  try{
+    if(!currentUser)throw new Error("Accedi prima al tuo account.");
+    const registration=await getRegistration();
+    const subscription=await registration.pushManager.getSubscription();
+    if(!subscription||Notification.permission!=="granted")
+      throw new Error("Attiva prima le notifiche.");
+    const response=await fetch(FUNCTION_URL,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "apikey":SUPABASE_PUBLISHABLE_KEY,
+        "Authorization":"Bearer "+SUPABASE_PUBLISHABLE_KEY
       },
-      body: JSON.stringify({
-        subscription: subscription.toJSON()
-      })
+      body:JSON.stringify({subscription:subscription.toJSON()})
     });
-
-    const result = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      throw new Error(
-        "HTTP " + response.status + ": " +
-        (result.error || result.details || "Errore del server")
-      );
-    }
-
-    setStatus("Richiesta inviata. Controlla le notifiche del dispositivo.");
-  } catch (error) {
-    setStatus("Errore: " + error.message);
-  } finally {
-    testButton.disabled = false;
+    const result=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(result.error||result.details||"Errore del server.");
+    alert("Richiesta di notifica inviata. Controlla il dispositivo.");
+  }catch(error){alert("Errore: "+error.message);}
+  finally{testButton.disabled=false;}
+}
+function applyTheme(){
+  if(currentTheme==="auto"){
+    document.documentElement.removeAttribute("data-theme");
+    document.documentElement.style.colorScheme="";
+  }else{
+    document.documentElement.style.colorScheme=currentTheme;
+    document.documentElement.style.setProperty("color-scheme",currentTheme);
+    const light=currentTheme==="light";
+    const vars=light?{
+      "--bg":"#eaf0ef","--panel":"#ffffff","--panel2":"#f2f7f6",
+      "--input":"#f1f5f4","--border":"#dce6e4","--text":"#172827",
+      "--muted":"#708381","--accent":"#00a98d","--accentText":"#ffffff",
+      "--bubbleMe":"#c9f5e8","--bubbleOther":"#ffffff"
+    }:{
+      "--bg":"#0b1416","--panel":"#111f22","--panel2":"#17282b",
+      "--input":"#1a2b2e","--border":"#263b3e","--text":"#eef8f7",
+      "--muted":"#91a8a9","--accent":"#00d9b4","--accentText":"#03241f",
+      "--bubbleMe":"#075e50","--bubbleOther":"#1b2b2e"
+    };
+    Object.entries(vars).forEach(([key,value])=>document.documentElement.style.setProperty(key,value));
   }
 }
-
-requestCodeButton.addEventListener("click", requestEmailCode);
-verifyButton.addEventListener("click", verifyEmailCode);
-resendCodeButton.addEventListener("click", resendEmailCode);
-backButton.addEventListener("click", goBackToRegistration);
-loginButton.addEventListener("click", loginAccount);
-logoutButton.addEventListener("click", logoutAccount);
-enableButton.addEventListener("click", enableNotifications);
-testButton.addEventListener("click", sendTestNotification);
-
-async function initialize() {
-  try {
-    const { data, error } = await client.auth.getSession();
-
-    if (error) throw error;
-
-    if (data.session?.user) {
-      showApp(data.session.user);
-    } else {
-      showAuth();
-      setStatus("Accedi o crea un account.");
-    }
-
-    client.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        showApp(session.user);
-      } else {
-        showAuth();
-      }
+function cycleTheme(){
+  currentTheme=currentTheme==="auto"?"light":currentTheme==="light"?"dark":"auto";
+  applyTheme();
+  $("themeButton").title="Tema: "+(currentTheme==="auto"?"automatico":currentTheme==="light"?"chiaro":"scuro");
+  $("themeButton").textContent=currentTheme==="auto"?"◐":currentTheme==="light"?"☀":"☾";
+}
+requestCodeButton.addEventListener("click",requestEmailCode);
+verifyButton.addEventListener("click",verifyEmailCode);
+resendCodeButton.addEventListener("click",resendEmailCode);
+backButton.addEventListener("click",goBackToRegistration);
+loginButton.addEventListener("click",loginAccount);
+logoutButton.addEventListener("click",logoutAccount);
+$("composer").addEventListener("submit",sendMessage);
+$("newChatButton").addEventListener("click",createConversation);
+$("globalSearch").addEventListener("input",renderConversations);
+$("backToChats").addEventListener("click",()=>appSection.classList.remove("chat-open"));
+$("themeButton").addEventListener("click",cycleTheme);
+$("settingsButton").addEventListener("click",()=>$("settingsPanel").classList.remove("hidden"));
+$("closeSettings").addEventListener("click",()=>$("settingsPanel").classList.add("hidden"));
+$("settingsPanel").addEventListener("click",event=>{
+  if(event.target===$("settingsPanel"))$("settingsPanel").classList.add("hidden");
+});
+$("notificationsButton").addEventListener("click",()=>$("settingsPanel").classList.remove("hidden"));
+enableButton.addEventListener("click",enableNotifications);
+testButton.addEventListener("click",sendTestNotification);
+$("chatInfoButton").addEventListener("click",toggleFavorite);
+$("searchMessagesButton").addEventListener("click",()=>{
+  const term=prompt("Cerca un testo nella conversazione:");
+  if(term===null||!term.trim())return;
+  const chat=conversations.find(item=>item.id===activeChatId);
+  const found=chat?.messages.some(message=>message.text.toLowerCase().includes(term.trim().toLowerCase()));
+  alert(found?"Trovato nella conversazione.":"Nessun messaggio trovato.");
+});
+document.querySelectorAll(".filter").forEach(button=>{
+  button.addEventListener("click",()=>{
+    activeFilter=button.dataset.filter;
+    document.querySelectorAll(".filter").forEach(item=>item.classList.toggle("active",item===button));
+    renderConversations();
+  });
+});
+$("messageInput").addEventListener("input",event=>{
+  event.target.style.height="auto";
+  event.target.style.height=Math.min(event.target.scrollHeight,130)+"px";
+});
+$("messageInput").addEventListener("keydown",event=>{
+  if(event.key==="Enter"&&!event.shiftKey){
+    event.preventDefault();
+    $("composer").requestSubmit();
+  }
+});
+window.addEventListener("resize",()=>{
+  if(!window.matchMedia("(max-width: 800px)").matches)
+    appSection.classList.remove("chat-open");
+});
+async function initialize(){
+  loadConversations();
+  try{
+    const {data,error}=await client.auth.getSession();
+    if(error)throw error;
+    if(data.session?.user)showApp(data.session.user);
+    else showAuth();
+    client.auth.onAuthStateChange((_event,session)=>{
+      if(session?.user)showApp(session.user);
+      else showAuth();
     });
-  } catch (error) {
+  }catch(error){
     showAuth();
-    setStatus("Errore di inizializzazione: " + error.message);
+    setStatus("Errore di inizializzazione: "+error.message);
   }
 }
-
+applyTheme();
 initialize();
 </script>
 </body>
