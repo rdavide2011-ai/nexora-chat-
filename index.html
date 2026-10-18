@@ -10,10 +10,8 @@
   <link rel="icon" type="image/png" href="/logo.png">
   <link rel="apple-touch-icon" href="/logo.png">
   <title>Nexora Chat</title>
-
   <style>
     * { box-sizing: border-box; }
-
     :root {
       color-scheme: dark;
       --bg: #07171c;
@@ -24,7 +22,6 @@
       --text: #f3ffff;
       --muted: #a5c5c9;
     }
-
     body {
       margin: 0;
       min-height: 100vh;
@@ -38,7 +35,6 @@
       color: var(--text);
       font-family: Arial, Helvetica, sans-serif;
     }
-
     main {
       width: 100%;
       max-width: 430px;
@@ -48,7 +44,6 @@
       background: linear-gradient(160deg, #102d33, #091d23);
       box-shadow: 0 24px 80px #0008, 0 0 30px #00e5c30d;
     }
-
     .logo {
       display: block;
       width: 112px;
@@ -58,30 +53,24 @@
       border-radius: 22px;
       filter: drop-shadow(0 0 16px #00e5c326);
     }
-
     h1, .subtitle { text-align: center; }
-
     h1 {
       margin: 8px 0;
       font-size: 27px;
       letter-spacing: 1px;
     }
-
     .subtitle {
       margin: 0 0 25px;
       color: var(--muted);
       line-height: 1.5;
     }
-
     h2 { font-size: 19px; }
-
     label {
       display: block;
       margin: 13px 0 6px;
       color: #d8eeee;
       font-size: 13px;
     }
-
     input {
       display: block;
       width: 100%;
@@ -94,12 +83,10 @@
       font-size: 16px;
       transition: border-color .2s, box-shadow .2s;
     }
-
     input:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px #00e5c31c;
     }
-
     button {
       width: 100%;
       min-height: 46px;
@@ -114,38 +101,31 @@
       cursor: pointer;
       transition: transform .15s, filter .15s;
     }
-
     button:hover:not(:disabled) {
       filter: brightness(1.08);
       transform: translateY(-1px);
     }
-
     button.secondary {
       background: #12363c;
       border-color: #24545b;
       color: #e9ffff;
     }
-
     button.danger {
       background: #542b36;
       border-color: #75404b;
       color: #fff;
     }
-
     button:disabled {
       opacity: .5;
       cursor: not-allowed;
       transform: none;
     }
-
     .separator {
       height: 1px;
       margin: 24px 0;
       background: linear-gradient(90deg, transparent, #28616a, transparent);
     }
-
     .hidden { display: none !important; }
-
     #status {
       margin: 18px 0 0;
       color: #a8e9e2;
@@ -154,7 +134,6 @@
       overflow-wrap: anywhere;
       text-align: center;
     }
-
     .account {
       padding: 15px;
       border: 1px solid #1a454c;
@@ -162,26 +141,22 @@
       background: #091b20;
       overflow-wrap: anywhere;
     }
-
     .account strong {
       display: block;
       margin-bottom: 6px;
       color: var(--accent);
     }
-
     .small {
       color: #a5c5c9;
       font-size: 12px;
       line-height: 1.6;
     }
-
     .code-input {
       text-align: center;
       letter-spacing: 8px;
       font-size: 24px;
       font-weight: bold;
     }
-
     @media (max-width: 380px) {
       body { padding: 12px; }
       main { padding: 22px 17px; }
@@ -189,7 +164,6 @@
     }
   </style>
 </head>
-
 <body>
 <main>
   <img class="logo" src="/logo.png" alt="Logo Nexora Chat">
@@ -231,12 +205,11 @@
     </section>
 
     <div class="separator"></div>
-
     <h2>Accedi</h2>
 
-    <label for="loginEmail">Email</label>
-    <input id="loginEmail" type="email" autocomplete="email"
-      placeholder="nome@esempio.it">
+    <label for="loginEmail">Email oppure username</label>
+    <input id="loginEmail" type="text" autocomplete="username"
+      placeholder="nome@esempio.it oppure username">
 
     <label for="loginPassword">Password</label>
     <input id="loginPassword" type="password"
@@ -252,7 +225,6 @@
     </div>
 
     <div class="separator"></div>
-
     <h2>Notifiche</h2>
     <p class="small">
       Attiva le notifiche su questo dispositivo per ricevere gli avvisi push.
@@ -270,7 +242,6 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 "use strict";
 
@@ -537,14 +508,21 @@ function goBackToRegistration() {
   setStatus("Puoi modificare i dati di registrazione.");
 }
 
+/*
+ * LOGIN CON EMAIL O USERNAME
+ *
+ * Se il campo contiene "@", viene trattato come email.
+ * Altrimenti viene cercato lo username tramite la funzione RPC
+ * get_login_email creata nel database Supabase.
+ */
 async function loginAccount() {
   if (isBusy) return;
 
-  const email = $("loginEmail").value.trim().toLowerCase();
+  const identifier = $("loginEmail").value.trim();
   const password = $("loginPassword").value;
 
-  if (!email || !password) {
-    setStatus("Inserisci email e password.");
+  if (!identifier || !password) {
+    setStatus("Inserisci email o username e password.");
     return;
   }
 
@@ -552,12 +530,37 @@ async function loginAccount() {
     setBusy(true);
     setStatus("Accesso in corso...");
 
+    let email = identifier.toLowerCase();
+
+    if (!identifier.includes("@")) {
+      const {
+        data: resolvedEmail,
+        error: lookupError
+      } = await client.rpc("get_login_email", {
+        p_username: identifier
+      });
+
+      if (lookupError) {
+        console.error("Errore ricerca username:", lookupError);
+        throw new Error("Impossibile verificare lo username. Riprova.");
+      }
+
+      if (!resolvedEmail) {
+        throw new Error("Username o password non corretti.");
+      }
+
+      email = String(resolvedEmail).trim().toLowerCase();
+    }
+
     const { data, error } = await client.auth.signInWithPassword({
       email,
       password
     });
 
-    if (error) throw error;
+    if (error) {
+      throw new Error("Email/username o password non corretti.");
+    }
+
     showApp(data.user);
   } catch (error) {
     setStatus("Accesso non riuscito: " + error.message);
